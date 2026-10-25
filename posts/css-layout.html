@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS 布局里那些我踩过的坑 · 你的名字</title>
+  <meta name="description" content="Flex 与 Grid 的边界在哪里，什么场景该用哪个。">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">你的名字<span>.</span></a>
+      <div class="nav-links">
+        <a href="../index.html#about">关于</a>
+        <a href="../index.html#work">作品</a>
+        <a href="../blog.html" class="active">博客</a>
+        <a href="../index.html#contact">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="post-header">
+    <div class="container">
+      <a href="../blog.html" class="back-link">← 返回文章列表</a>
+      <h1>CSS 布局里那些我踩过的坑</h1>
+      <div class="p-meta">2024-09-18 · 阅读约 5 分钟</div>
+    </div>
+  </header>
+
+  <article class="post-body">
+    <div class="container">
+
+      <p>
+        这几年写样式，遇到过不少反复出现的问题。
+        写下来既是备忘，也希望能帮到刚开始写页面的人。
+      </p>
+
+      <h2>Flex 还是 Grid</h2>
+      <p>
+        一个很好用的判断标准：<strong>内容决定布局用 Flex，布局决定内容用 Grid</strong>。
+      </p>
+      <ul>
+        <li>一行按钮、导航条、卡片内部的左右排列 —— Flex。</li>
+        <li>整页的区域划分、卡片网格、复杂的行列对齐 —— Grid。</li>
+      </ul>
+      <p>
+        我早期的毛病是全都用 Flex，结果一遇到需要「两列等宽、间距固定」的场景，
+        就开始算百分比和 gap，越算越乱。
+      </p>
+
+      <h2>高度塌陷与 min-height</h2>
+      <p>
+        Flex 子项默认的 <code>min-height</code> 是 <code>auto</code>，
+        内部内容撑高时会溢出容器。如果希望内容区可滚动，需要显式设置：
+      </p>
+      <pre><code>.sidebar {
+  overflow-y: auto;
+  min-height: 0;   /* 关键一行 */
+}</code></pre>
+      <p>这行代码我至少查过三次文档。</p>
+
+      <h2>移动端 1px 边框</h2>
+      <p>
+        高分辨率屏上，<code>1px</code> 的边框看起来会偏粗。
+        常见做法是用伪元素加 <code>transform: scaleY(0.5)</code> 来模拟细线：
+      </p>
+      <pre><code>.hairline::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: #e6ecf5;
+  transform: scaleY(0.5);
+}</code></pre>
+
+      <h2>垂直居中</h2>
+      <p>
+        现在只需要一行：
+      </p>
+      <pre><code>.parent { display: grid; place-items: center; }</code></pre>
+      <p>
+        比当年「定位 + translate」的方案干净太多，也不用关心元素尺寸。
+      </p>
+
+      <hr>
+
+      <p>布局这块没有银弹，多写、多看别人的实现，手感会慢慢上来。</p>
+
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 你的名字 · 本站使用纯 HTML + CSS 构建</p>
+    </div>
+  </footer>
+
+</body>
+</html>

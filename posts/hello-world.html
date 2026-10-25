@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何从零搭一个个人网站 · 你的名字</title>
+  <meta name="description" content="从买域名到上线，把整个流程拆成几步讲清楚。">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">你的名字<span>.</span></a>
+      <div class="nav-links">
+        <a href="../index.html#about">关于</a>
+        <a href="../index.html#work">作品</a>
+        <a href="../blog.html" class="active">博客</a>
+        <a href="../index.html#contact">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="post-header">
+    <div class="container">
+      <a href="../blog.html" class="back-link">← 返回文章列表</a>
+      <h1>如何从零搭一个个人网站</h1>
+      <div class="p-meta">2024-11-02 · 阅读约 6 分钟</div>
+    </div>
+  </header>
+
+  <article class="post-body">
+    <div class="container">
+
+      <p>
+        很多人买了域名之后就卡住了：域名有了，然后呢？
+        其实整个流程只有四件事——<strong>实名认证、准备托管、配 DNS、上 HTTPS</strong>。
+        把它们按顺序做完，网站就能访问了。
+      </p>
+
+      <h2>一、域名实名认证</h2>
+      <p>
+        域名注册后必须在规定时间内完成实名认证，否则会被暂停解析。
+        这条是最容易被忽略的，因为它不会立刻报错，等你发现时网站已经打不开了。
+      </p>
+
+      <h2>二、准备托管</h2>
+      <p>
+        托管就是「放页面的地方」。常见三种：
+      </p>
+      <ul>
+        <li><strong>云服务器</strong>：完全可控，能跑后端，但需要自己维护系统。</li>
+        <li><strong>对象存储</strong>：只放静态文件，便宜，适合纯展示站。</li>
+        <li><strong>托管平台</strong>：免费额度足够个人站，自带 HTTPS 和全球加速。</li>
+      </ul>
+      <p>
+        如果只是个人主页和博客，第三种最省事。唯一要注意的是：
+        服务器放在中国大陆时，域名需要备案才能对外提供访问。
+      </p>
+
+      <blockquote>
+        简单判断：想两小时内上线，就别选需要备案的方案。
+      </blockquote>
+
+      <h2>三、配置 DNS 解析</h2>
+      <p>
+        解析就是告诉互联网「这个域名对应的机器在哪」。
+        在域名服务商的控制台里加一条记录：
+      </p>
+      <pre><code>类型   主机记录    记录值
+A      @          你的服务器 IP
+CNAME  www        托管平台给你的域名</code></pre>
+      <p>
+        <code>@</code> 代表根域名本身。生效时间通常几分钟，
+        最长可能要几十小时，取决于解析商的缓存策略。
+      </p>
+
+      <h2>四、HTTPS</h2>
+      <p>
+        证书现在基本都是免费的，很多托管平台会自动帮你申请和续期。
+        如果自己搭服务器，用 Let's Encrypt 的自动化工具也能一条命令搞定。
+      </p>
+
+      <hr>
+
+      <p>
+        做完这四步，你的个人网站就上线了。
+        接下来才是真正花时间的地方——写内容。
+      </p>
+
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 你的名字 · 本站使用纯 HTML + CSS 构建</p>
+    </div>
+  </footer>
+
+</body>
+</html>

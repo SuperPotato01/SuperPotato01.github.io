@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>你的名字 · 个人主页</title>
+  <meta name="description" content="这里是你的个人介绍，一句话说清你是谁、在做什么。">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <!-- ===== 导航 ===== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">你的名字<span>.</span></a>
+      <div class="nav-links">
+        <a href="#about">关于</a>
+        <a href="#work">作品</a>
+        <a href="blog.html">博客</a>
+        <a href="#contact">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== 首屏 ===== -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-eyebrow">你好，我是</div>
+      <h1>你的名字<br>做产品设计与前端开发</h1>
+      <p>
+        一句话介绍你自己。比如：我关注把复杂的东西做简单，
+        目前在一家互联网公司负责产品与前端，业余喜欢写点技术笔记。
+      </p>
+      <div class="btn-row">
+        <a href="#work" class="btn btn-primary">看看我的作品 →</a>
+        <a href="blog.html" class="btn btn-ghost">阅读博客</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== 关于我 ===== -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-label">About</div>
+          <h2>关于我</h2>
+          <p>简单聊聊我在做什么、关心什么。</p>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-text">
+            <p>
+              我是一名<strong>前端开发 / 产品设计师</strong>（改成你的真实身份），
+              有 X 年从事相关工作的经验。擅长把模糊的需求拆成清晰的界面，
+              并且亲手把它实现出来。
+            </p>
+            <p>
+              我对「减少用户操作步骤」这件事有执念，也喜欢研究交互细节。
+              工作之外，我会写一些技术笔记，记录踩过的坑和想明白的问题。
+            </p>
+            <p>
+              如果你有想法想聊聊，欢迎通过页面底部的邮箱联系我。
+            </p>
+          </div>
+
+          <div>
+            <div class="skills-title">技术栈</div>
+            <div class="skill-tags">
+              <span class="tag">TypeScript</span>
+              <span class="tag">React</span>
+              <span class="tag">Vue</span>
+              <span class="tag">Node.js</span>
+              <span class="tag">Tailwind CSS</span>
+              <span class="tag">Figma</span>
+              <span class="tag">PostgreSQL</span>
+            </div>
+
+            <div class="skills-title">经历</div>
+            <ul class="timeline">
+              <li>
+                <div class="t-time">2023 — 至今</div>
+                <div class="t-title">某互联网公司 · 高级前端工程师</div>
+                <p class="t-desc">负责核心业务线的前端架构与性能优化。</p>
+              </li>
+              <li>
+                <div class="t-time">2021 — 2023</div>
+                <div class="t-title">某创业团队 · 全栈开发</div>
+                <p class="t-desc">从零搭建产品原型，同时负责设计与实现。</p>
+              </li>
+              <li>
+                <div class="t-time">2021</div>
+                <div class="t-title">某大学 · 计算机相关专业</div>
+                <p class="t-desc">在校期间做过若干开源小项目。</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 作品集 ===== -->
+    <section class="section" id="work">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-label">Work</div>
+          <h2>作品集</h2>
+          <p>几个我参与或独立完成的项目。</p>
+        </div>
+
+        <div class="work-grid">
+
+          <article class="work-card">
+            <div class="work-thumb">project-screenshot</div>
+            <h3>数据看板 Dashboard</h3>
+            <p>面向运营团队的可视化看板，支持多维度筛选与实时刷新，加载性能提升约 40%。</p>
+            <div class="work-meta">
+              <span>React</span>
+              <span>ECharts</span>
+            </div>
+            <a href="#" class="work-link">查看详情 →</a>
+          </article>
+
+          <article class="work-card">
+            <div class="work-thumb">project-screenshot</div>
+            <h3>组件库 Design System</h3>
+            <p>从零搭建的组件库，覆盖 30+ 基础组件，已在三个业务线落地使用。</p>
+            <div class="work-meta">
+              <span>TypeScript</span>
+              <span>Storybook</span>
+            </div>
+            <a href="#" class="work-link">查看详情 →</a>
+          </article>
+
+          <article class="work-card">
+            <div class="work-thumb">project-screenshot</div>
+            <h3>个人博客系统</h3>
+            <p>支持 Markdown 写作与代码高亮的轻量博客，静态生成，访问速度快。</p>
+            <div class="work-meta">
+              <span>Astro</span>
+              <span>Markdown</span>
+            </div>
+            <a href="#" class="work-link">查看详情 →</a>
+          </article>
+
+          <article class="work-card">
+            <div class="work-thumb">project-screenshot</div>
+            <h3>小程序工具站</h3>
+            <p>一个面向学生的效率工具小程序，累计用户约 2 万，日活稳定。</p>
+            <div class="work-meta">
+              <span>小程序</span>
+              <span>Node.js</span>
+            </div>
+            <a href="#" class="work-link">查看详情 →</a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 博客入口 ===== -->
+    <section class="section" id="blog-teaser">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-label">Writing</div>
+          <h2>最近写的文章</h2>
+          <p>技术笔记与一些不成熟的想法。</p>
+        </div>
+
+        <ul class="post-list">
+          <li class="post-item">
+            <div class="p-date">2024-11-02</div>
+            <h3><a href="posts/hello-world.html">如何从零搭一个个人网站</a></h3>
+            <p>从买域名到上线，把整个流程拆成几步讲清楚，包含容易踩的坑。</p>
+            <div class="post-tags"><span>教程</span><span>部署</span></div>
+          </li>
+          <li class="post-item">
+            <div class="p-date">2024-09-18</div>
+            <h3><a href="posts/css-layout.html">CSS 布局里那些我踩过的坑</a></h3>
+            <p>Flex 与 Grid 的边界在哪里，什么场景该用哪个，附具体例子。</p>
+            <div class="post-tags"><span>CSS</span><span>前端</span></div>
+          </li>
+          <li class="post-item">
+            <div class="p-date">2024-07-05</div>
+            <h3><a href="posts/why-static-site.html">为什么我给个人站选了静态方案</a></h3>
+            <p>对比了几种常见的托管方式，说说最后为什么选了最简单的那种。</p>
+            <div class="post-tags"><span>随笔</span></div>
+          </li>
+        </ul>
+
+        <div class="btn-row" style="margin-top: 28px;">
+          <a href="blog.html" class="btn btn-ghost">查看全部文章</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 联系 ===== -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="contact-box">
+          <h2>聊聊？</h2>
+          <p>有想做的项目、想讨论的问题，或者只是想打个招呼。</p>
+          <div class="contact-links">
+            <a href="mailto:you@example.com" class="btn btn-primary">发邮件给我</a>
+            <a href="https://github.com/" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+            <a href="#" class="btn btn-ghost">微信 / 其他</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 你的名字 · 本站使用纯 HTML + CSS 构建</p>
+    </div>
+  </footer>
+
+</body>
+</html>
