@@ -1794,6 +1794,46 @@ body.loaded {
     linear-gradient(160deg, #0c1526 0%, #101d38 60%, #131f3c 100%);
 }
 
+/* ---------- 小标题锚点 ---------- */
+.h-anchor {
+  margin-left: 8px;
+  font-size: 0.8em;
+  color: var(--text-dim);
+  opacity: 0;
+  transition: opacity 0.18s;
+  text-decoration: none;
+}
+
+.post-body h2:hover .h-anchor,
+.post-body h3:hover .h-anchor,
+.h-anchor:focus {
+  opacity: 1;
+}
+
+/* ---------- 作品卡键盘可达 ---------- */
+.work-card:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- 移动端导航横向滚动（避免换行挤压） ---------- */
+@media (max-width: 480px) {
+  .nav-links {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------- 暗色下视频略降亮度 ---------- */
+[data-theme="dark"] .hero-video {
+  filter: contrast(1.12) brightness(0.7) saturate(1.1);
+}
+
 /* ---------- 打印样式（导出 PDF / 简历） ---------- */
 @media print {
   .nav, .to-top, .cursor-glow, .scroll-hint, .tech-marquee,

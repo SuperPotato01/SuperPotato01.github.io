@@ -447,6 +447,50 @@
     });
   })();
 
+  /* ---------- 23. 视频离开视口时暂停（省电省 CPU） ---------- */
+  (function videoPause() {
+    var v = $(".hero-video");
+    if (!v || !("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          var p = v.play();
+          if (p && p.catch) p.catch(function () { /* 自动播放被拦截时忽略 */ });
+        } else {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.05 });
+    io.observe(v);
+  })();
+
+  /* ---------- 24. 文章小标题锚点链接 ---------- */
+  (function headingAnchors() {
+    var heads = $$(".post-body h2[id], .post-body h3");
+    heads.forEach(function (h) {
+      if (!h.id) {
+        h.id = (h.textContent || "").trim().replace(/\s+/g, "-").slice(0, 24);
+      }
+      var a = document.createElement("a");
+      a.className = "h-anchor";
+      a.href = "#" + h.id;
+      a.textContent = "#";
+      a.setAttribute("aria-label", "跳转到该章节");
+      h.appendChild(a);
+    });
+  })();
+
+  /* ---------- 25. 导航当前项无障碍标记 ---------- */
+  (function ariaCurrent() {
+    var here = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+    $$(".nav-links a").forEach(function (a) {
+      var href = (a.getAttribute("href") || "").toLowerCase();
+      if (href === here || (here === "" && href === "index.html")) {
+        a.setAttribute("aria-current", "page");
+      }
+    });
+  })();
+
   /* ---------- 19. 页脚时钟 ---------- */
   (function clock() {
     var el = $("#clock");
