@@ -25,6 +25,13 @@
 
   <!-- ===== 首屏 ===== -->
   <header class="hero">
+    <!-- 科幻地球夜景视频背景（静音自动循环，移动端兼容 playsinline） -->
+    <video class="hero-video" autoplay muted loop playsinline preload="auto"
+          poster="assets/earth-poster.jpg" aria-hidden="true">
+      <source src="assets/earth-bg.mp4" type="video/mp4">
+    </video>
+    <!-- 渐变蒙版：压暗视频保证文字可读 -->
+    <div class="hero-veil" aria-hidden="true"></div>
     <div class="container">
       <div class="hero-eyebrow">欢迎来到我的个人站</div>
       <h1>你好，我是土豆<br>做<em>嵌入式系统开发</em></h1>
