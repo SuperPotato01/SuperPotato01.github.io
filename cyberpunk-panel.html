@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYSTEM ONLINE · 赛博朋克数据面板</title>
+<style>
+/* ============================================================
+   赛博朋克城市数据面板
+   —— 所有可调参数集中在 :root 和下方 CONST 对象里
+   ============================================================ */
+
+/* ---------- 主题变量（改这里换配色） ---------- */
+:root {
+  --cyan: #00f0ff;          /* 主霓虹青 */
+  --magenta: #ff00aa;       /* 主霓虹品红 */
+  --bg-top: #05050a;        /* 背景渐变起点（近黑） */
+  --bg-bottom: #1a0b2e;     /* 背景渐变终点（深紫） */
+  --card-bg: rgba(10, 14, 30, 0.55);       /* 数据卡片底色 */
+  --card-border: rgba(0, 240, 255, 0.25);  /* 卡片描边 */
+  --glow-cyan: 0 0 8px rgba(0,240,255,.8), 0 0 24px rgba(0,240,255,.35);
+  --glow-magenta: 0 0 8px rgba(255,0,170,.8), 0 0 24px rgba(255,0,170,.35);
+  --font-mono: "Cascadia Code", Consolas, "SF Mono", monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: var(--font-mono);
+  /* 深色渐变背景：近黑 → 深紫 */
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+  color: #e8f6ff;
+  cursor: crosshair;
+}
+
+/* ---------- 全屏 Canvas：粒子星点 ---------- */
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+}
+
+/* ---------- 背景网格线（纯 CSS，透视变形营造纵深） ---------- */
+.grid-floor {
+  position: fixed;
+  left: -50%;
+  bottom: -12vh;
+  width: 200%;
+  height: 55vh;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,240,255,.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,240,255,.14) 1px, transparent 1px);
+  background-size: 44px 44px;
+  /* 透视压扁，模拟地面网格 */
+  transform: perspective(420px) rotateX(62deg);
+  animation: grid-flow 3.2s linear infinite;
+  opacity: .55;
+  mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 85%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,.9), transparent 85%);
+}
+@keyframes grid-flow {
+  to { background-position: 0 44px; }  /* 网格向下流动 */
+}
+
+/* ---------- 布局容器 ---------- */
+.stage {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 3vh, 30px);
+  padding: 14px;
+}
+
+/* ---------- 顶部霓虹大标题 ---------- */
+.title {
+  font-size: clamp(26px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: .18em;
+  color: #fff;
+  text-shadow:
+    0 0 6px #fff,
+    var(--glow-cyan),
+    0 0 60px rgba(0,240,255,.5);
+  animation: title-flicker 4s infinite;  /* 偶发闪烁 */
+}
+.title .mag {
+  color: #ffd7f0;
+  text-shadow: 0 0 6px #fff, var(--glow-magenta), 0 0 60px rgba(255,0,170,.5);
+}
+@keyframes title-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: .55; }   /* 一次快速暗闪 */
+  94% { opacity: 1; }
+  96% { opacity: .75; }
+  97% { opacity: 1; }
+}
+.subtitle {
+  margin-top: -6px;
+  font-size: clamp(10px, 1.6vw, 14px);
+  letter-spacing: .5em;
+  color: rgba(0,240,255,.75);
+  text-shadow: var(--glow-cyan);
+}
+
+/* ---------- 中央主视觉：发光圆环 ---------- */
+.core-wrap {
+  position: relative;
+  width: clamp(150px, 26vmin, 240px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+/* 呼吸光晕（最底层） */
+.core-halo {
+  position: absolute;
+  inset: -46%;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(0,240,255,.22) 0%, rgba(123,0,255,.12) 45%, transparent 70%);
+  animation: breathe 3.4s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(.9);  opacity: .75; }
+  50%      { transform: scale(1.12); opacity: 1; }
+}
+
+/* 外环：虚线旋转 */
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+.ring.outer {
+  border: 2px dashed rgba(0,240,255,.8);
+  box-shadow: var(--glow-cyan), inset 0 0 18px rgba(0,240,255,.25);
+  animation: spin 9s linear infinite;
+}
+/* 内环：反向旋转的实线 + 缺口 */
+.ring.inner {
+  inset: 16%;
+  border: 2px solid transparent;
+  border-top-color: var(--magenta);
+  border-right-color: rgba(255,0,170,.5);
+  box-shadow: var(--glow-magenta);
+  animation: spin 5.5s linear infinite reverse;
+}
+/* 刻度环：更细更快 */
+.ring.ticks {
+  inset: -12%;
+  border: 1px solid transparent;
+  border-top-color: rgba(0,240,255,.6);
+  border-bottom-color: rgba(0,240,255,.3);
+  animation: spin 16s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 核心数字：随机跳动的 CPU 值 */
+.core-value {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-size: clamp(24px, 5vmin, 40px);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: var(--glow-cyan);
+}
+.core-value small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: .3em;
+  color: rgba(0,240,255,.7);
+  margin-top: 2px;
+}
+
+/* ---------- 数据卡片 ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(120px, 170px));
+  gap: clamp(10px, 2vw, 22px);
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 16px rgba(0,240,255,.12), inset 0 0 24px rgba(0,240,255,.05);
+  animation: floaty 4.2s ease-in-out infinite;  /* 上下浮动 */
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 26px rgba(0,240,255,.35), inset 0 0 24px rgba(0,240,255,.1);
+}
+/* 每张卡片浮动错峰 + 视差容器（JS 设置 --px/--py） */
+.card:nth-child(1) { animation-delay: 0s;   }
+.card:nth-child(2) { animation-delay: .6s;  }
+.card:nth-child(3) { animation-delay: 1.2s; }
+.card:nth-child(4) { animation-delay: 1.8s; }
+.card:nth-child(5) { animation-delay: 2.4s; }
+@keyframes floaty {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -9px; }
+}
+
+.card h3 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  color: rgba(0,240,255,.85);
+  text-shadow: var(--glow-cyan);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.card h3 i { font-style: normal; color: rgba(255,0,170,.85); } /* 卡片编号 */
+
+.card .num {
+  font-size: clamp(20px, 2.6vw, 28px);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0,240,255,.6);
+  font-variant-numeric: tabular-nums;  /* 数字等宽防抖动 */
+}
+
+/* 进度条 */
+.bar {
+  margin-top: 8px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255,255,255,.08);
+  overflow: hidden;
+}
+.bar > span {
+  display: block;
+  height: 100%;
+  width: 50%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--cyan), var(--magenta));
+  box-shadow: 0 0 10px rgba(0,240,255,.7);
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+
+/* ---------- 底部终端滚动字幕 ---------- */
+.terminal {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 3;
+  background: rgba(5, 5, 12, .82);
+  border-top: 1px solid rgba(0,240,255,.25);
+  backdrop-filter: blur(4px);
+  padding: 8px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.terminal-track {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 26s linear infinite;
+  font-size: 12px;
+  color: rgba(0,240,255,.85);
+  text-shadow: 0 0 6px rgba(0,240,255,.4);
+}
+.terminal-track b { color: var(--magenta); font-weight: 600; text-shadow: var(--glow-magenta); }
+@keyframes marquee {
+  to { transform: translateX(-100%); }
+}
+
+/* ---------- 视差工具类（JS 给元素设置 translate） ---------- */
+.parallax { will-change: transform; }
+
+/* ---------- 响应式：窄屏卡片改为 2~3 列 ---------- */
+@media (max-width: 900px) {
+  .cards { grid-template-columns: repeat(3, minmax(110px, 150px)); }
+}
+@media (max-width: 560px) {
+  .cards { grid-template-columns: repeat(2, 1fr); width: min(92vw, 340px); }
+  .card:nth-child(5) { grid-column: 1 / -1; }  /* 第5张卡横跨 */
+  .grid-floor { bottom: -18vh; }
+}
+</style>
+</head>
+<body>
+
+<!-- 粒子画布 -->
+<canvas id="particles"></canvas>
+
+<!-- 地面网格 -->
+<div class="grid-floor"></div>
+
+<div class="stage">
+
+  <!-- 顶部标题 -->
+  <header style="text-align:center;" class="parallax" data-depth="0.4">
+    <div class="title">SYSTEM <span class="mag">ONLINE</span></div>
+    <div class="subtitle">NEO CITY · DATA GRID 2077</div>
+  </header>
+
+  <!-- 中央圆环核心 -->
+  <div class="core-wrap parallax" data-depth="0.7">
+    <div class="core-halo"></div>
+    <div class="ring ticks"></div>
+    <div class="ring outer"></div>
+    <div class="ring inner"></div>
+    <div class="core-value">
+      <span id="coreNum">87</span><small>CORE LOAD %</small>
+    </div>
+  </div>
+
+  <!-- 数据卡片 -->
+  <div class="cards parallax" data-depth="0.25">
+    <div class="card">
+      <h3>TRAFFIC <i>#01</i></h3>
+      <div class="num" data-min="12000" data-max="98000">0</div>
+      <div class="bar"><span style="width:62%"></span></div>
+    </div>
+    <div class="card">
+      <h3>ENERGY <i>#02</i></h3>
+      <div class="num" data-min="300" data-max="990">0</div>
+      <div class="bar"><span style="width:78%"></span></div>
+    </div>
+    <div class="card">
+      <h3>NODES <i>#03</i></h3>
+      <div class="num" data-min="800" data-max="2400">0</div>
+      <div class="bar"><span style="width:45%"></span></div>
+    </div>
+    <div class="card">
+      <h3>SIGNAL <i>#04</i></h3>
+      <div class="num" data-min="60" data-max="100">0</div>
+      <div class="bar"><span style="width:90%"></span></div>
+    </div>
+    <div class="card">
+      <h3>THREAT <i>#05</i></h3>
+      <div class="num" data-min="0" data-max="40">0</div>
+      <div class="bar"><span style="width:18%"></span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 底部终端字幕 -->
+<div class="terminal">
+  <div class="terminal-track">
+    &gt; initializing neural grid... <b>OK</b> &nbsp;│&nbsp; syncing 2400 nodes... <b>OK</b>
+    &nbsp;│&nbsp; firewall: <b>ACTIVE</b> &nbsp;│&nbsp; intrusion attempts blocked: 17 today
+    &nbsp;│&nbsp; weather: acid rain in sector 7 &nbsp;│&nbsp; power grid stable at 96.4%
+    &nbsp;│&nbsp; AI core mood: <b>OPTIMISTIC</b> &nbsp;│&nbsp; have a nice night, citizen_01
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   JS 部分 —— 三块：粒子系统 / 数据刷新 / 鼠标视差
+   所有频率、数量参数集中在 CONST，方便调参
+   ============================================================ */
+
+const CONST = {
+  particleCount: 110,     // 粒子数量（手机上自动减半）
+  particleSpeed: 0.18,    // 粒子漂移速度系数
+  linkDist: 110,          // 粒子之间连线距离阈值
+  dataRefreshMs: 1600,    // 卡片数字刷新间隔
+  coreRefreshMs: 900,     // 核心数字刷新间隔
+  parallaxStrength: 14,   // 视差最大位移（像素）
+  parallaxEase: 0.06,     // 视差跟随缓动（0~1，越小越"跟手迟钝"）
+};
+
+/* ---------- 1. 粒子系统 ---------- */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+let W, H, particles = [];
+
+// 是手机就减少粒子数，保证流畅
+const isMobile = matchMedia("(max-width: 560px)").matches;
+const COUNT = isMobile ? Math.floor(CONST.particleCount * 0.5) : CONST.particleCount;
+
+function resize() {
+  W = canvas.width  = innerWidth  * devicePixelRatio;
+  H = canvas.height = innerHeight * devicePixelRatio;
+  canvas.style.width  = innerWidth  + "px";
+  canvas.style.height = innerHeight + "px";
+}
+addEventListener("resize", resize);
+resize();
+
+// 随机生成粒子：位置、速度、颜色（青或品红）、大小
+function makeParticle() {
+  const magenta = Math.random() < 0.25;   // 25% 是品红，其余青色
+  return {
+    x: Math.random() * W,
+    y: Math.random() * H,
+    vx: (Math.random() - 0.5) * CONST.particleSpeed * devicePixelRatio,
+    vy: (Math.random() - 0.5) * CONST.particleSpeed * devicePixelRatio,
+    r: (Math.random() * 1.6 + 0.6) * devicePixelRatio,
+    color: magenta ? "255,0,170" : "0,240,255",
+    tw: Math.random() * Math.PI * 2,       // 闪烁相位
+  };
+}
+for (let i = 0; i < COUNT; i++) particles.push(makeParticle());
+
+// 渲染循环：漂移 + 闪烁 + 近距连线
+function drawParticles(t) {
+  ctx.clearRect(0, 0, W, H);
+
+  for (const p of particles) {
+    p.x += p.vx; p.y += p.vy; p.tw += 0.02;
+    // 越界则从另一侧回来（环绕）
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+
+    const alpha = 0.35 + Math.sin(p.tw) * 0.25;   // 呼吸闪烁
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${p.color},${alpha})`;
+    ctx.fill();
+  }
+
+  // 粒子连线：距离小于阈值时画淡淡的线
+  const dMax = CONST.linkDist * devicePixelRatio;
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const a = particles[i], b = particles[j];
+      const dx = a.x - b.x, dy = a.y - b.y;
+      const d = dx * dx + dy * dy;
+      if (d < dMax * dMax) {
+        ctx.strokeStyle = `rgba(0,240,255,${(1 - Math.sqrt(d) / dMax) * 0.12})`;
+        ctx.lineWidth = devicePixelRatio * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+requestAnimationFrame(drawParticles);
+
+/* ---------- 2. 数据随机刷新 ---------- */
+const fmt = n => n.toLocaleString("en-US");
+
+// 普通卡片：数字 + 进度条同步刷新
+document.querySelectorAll(".card").forEach(card => {
+  const numEl = card.querySelector(".num");
+  const barEl = card.querySelector(".bar > span");
+  const min = +numEl.dataset.min, max = +numEl.dataset.max;
+
+  const tick = () => {
+    const v = Math.floor(min + Math.random() * (max - min));
+    numEl.textContent = fmt(v);
+    barEl.style.width = (5 + Math.random() * 90).toFixed(0) + "%";
+  };
+  tick();
+  setInterval(tick, CONST.dataRefreshMs + Math.random() * 600); // 错峰刷新
+});
+
+// 核心数字
+const coreEl = document.getElementById("coreNum");
+setInterval(() => {
+  coreEl.textContent = Math.floor(60 + Math.random() * 38);
+}, CONST.coreRefreshMs);
+
+/* ---------- 3. 鼠标视差 ---------- */
+// 原理：记录鼠标位置 → 每帧向目标位移缓动 → 按元素 depth 缩放
+let mx = 0, my = 0;          // 归一化鼠标位置 (-1 ~ 1)
+let cx = 0, cy = 0;          // 当前缓动值
+const layers = document.querySelectorAll(".parallax");
+
+addEventListener("pointermove", e => {
+  mx = (e.clientX / innerWidth)  * 2 - 1;
+  my = (e.clientY / innerHeight) * 2 - 1;
+});
+
+(function parallaxLoop() {
+  // 缓动跟随，产生"漂浮感"
+  cx += (mx - cx) * CONST.parallaxEase;
+  cy += (my - cy) * CONST.parallaxEase;
+
+  layers.forEach(el => {
+    const depth = parseFloat(el.dataset.depth || 0.5);
+    const dx = -cx * CONST.parallaxStrength * depth;
+    const dy = -cy * CONST.parallaxStrength * depth;
+    el.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
+  });
+  requestAnimationFrame(parallaxLoop);
+})();
+</script>
+</body>
+</html>
