@@ -44,7 +44,18 @@
         <a href="#work" class="btn btn-primary">看看我的作品 →</a>
         <a href="blog.html" class="btn btn-ghost">阅读博客</a>
       </div>
+
+      <!-- 数据条 -->
+      <div class="hero-stats reveal">
+        <div><b>3 年</b><span>工作经验</span></div>
+        <div><b>2 款</b><span>主导量产</span></div>
+        <div><b>5000+</b><span>设备在网</span></div>
+        <div><b>C / RTOS</b><span>主力技术</span></div>
+      </div>
     </div>
+
+    <!-- 下滑提示 -->
+    <div class="scroll-hint" aria-hidden="true">SCROLL</div>
   </header>
 
   <main>
@@ -231,8 +242,18 @@
 
   </main>
 
+  <!-- 返回顶部 -->
+  <button class="to-top" id="toTop" aria-label="返回顶部">↑</button>
+
   <footer class="footer">
     <div class="container">
+      <div class="footer-links">
+        <a href="index.html#about">关于</a>
+        <a href="index.html#work">作品</a>
+        <a href="blog.html">博客</a>
+        <a href="cyberpunk-panel.html">System Online</a>
+        <a href="https://github.com/SuperPotato01" target="_blank" rel="noopener">GitHub</a>
+      </div>
       <p>© 2026 土豆 · 本站使用纯 HTML + CSS 构建</p>
     </div>
   </footer>
@@ -254,6 +275,46 @@
         });
       }, { threshold: 0.12 });
       els.forEach(function (el) { io.observe(el); });
+    })();
+
+    // 返回顶部按钮：滚过 600px 显示
+    (function () {
+      var btn = document.getElementById('toTop');
+      var ticking = false;
+      addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          btn.classList.toggle('show', scrollY > 600);
+          ticking = false;
+        });
+      });
+      btn.addEventListener('click', function () {
+        scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+
+    // 导航滚动高亮（scrollspy）：当前区块对应导航项点亮
+    (function () {
+      var links = document.querySelectorAll('.nav-links a[href^="#"]');
+      var map = {};
+      links.forEach(function (a) {
+        var sec = document.querySelector(a.getAttribute('href'));
+        if (sec) map[a.getAttribute('href').slice(1)] = a;
+      });
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var link = map[e.target.id];
+          if (!link) return;
+          if (e.isIntersecting) {
+            links.forEach(function (a) { a.classList.remove('active'); });
+            link.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      Object.keys(map).forEach(function (id) {
+        spy.observe(document.getElementById(id));
+      });
     })();
   </script>
 

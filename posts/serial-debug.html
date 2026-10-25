@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
+<div class="read-progress" id="readProgress" aria-hidden="true"></div>
 
   <nav class="nav">
     <div class="nav-inner">
@@ -109,4 +110,15 @@
   </footer>
 
 </body>
+<script>
+  // 阅读进度条
+  (function () {
+    var bar = document.getElementById('readProgress');
+    addEventListener('scroll', function () {
+      var h = document.documentElement;
+      var pct = scrollY / (h.scrollHeight - h.clientHeight) * 100;
+      bar.style.width = pct.toFixed(1) + '%';
+    }, { passive: true });
+  })();
+</script>
 </html>
