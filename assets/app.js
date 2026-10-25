@@ -17,11 +17,27 @@
     if (!saved && matchMedia("(prefers-color-scheme: dark)").matches) saved = "dark";
     if (saved) root.setAttribute("data-theme", saved);
 
+    // 浏览器 UI 配色跟随主题（手机状态栏 / 地址栏）
+    var meta = document.querySelector('meta[name="theme-color"]');
+    function syncUI() {
+      var isDark = root.getAttribute("data-theme") === "dark";
+      if (meta) meta.setAttribute("content", isDark ? "#0a101e" : "#0c1526");
+      // 光标光晕在暗色下偏紫
+      var glow = $(".cursor-glow");
+      if (glow) {
+        glow.style.background = isDark
+          ? "radial-gradient(circle, rgba(123,92,230,0.10), transparent 65%)"
+          : "radial-gradient(circle, rgba(59,111,212,0.07), transparent 65%)";
+      }
+    }
+    syncUI();
+
     var btn = $("#themeToggle");
     if (!btn) return;
     btn.addEventListener("click", function () {
       var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
       root.setAttribute("data-theme", next);
+      syncUI();
       try { localStorage.setItem("theme", next); } catch (e) { /* 忽略 */ }
     });
   })();
@@ -290,7 +306,148 @@
     });
   })();
 
-  /* ---------- 13. 页脚时钟 ---------- */
+  /* ---------- 13. 导航自动隐藏（下滑隐藏 / 上滑显示） ---------- */
+  (function navAutoHide() {
+    var nav = $(".nav");
+    if (!nav) return;
+    var last = scrollY, ticking = false;
+    addEventListener("scroll", function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        var y = scrollY;
+        var hide = y > 220 && y > last;
+        nav.style.transform = hide ? "translateY(-100%)" : "";
+        last = y;
+        ticking = false;
+      });
+    }, { passive: true });
+  })();
+
+  /* ---------- 14. 键盘快捷键（D 切主题 / / 聚焦搜索 / T 回顶部） ---------- */
+  (function shortcuts() {
+    addEventListener("keydown", function (e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      var tag = (e.target.tagName || "").toLowerCase();
+      if (tag === "input" || tag === "textarea") return;
+      var k = e.key.toLowerCase();
+      if (k === "d") {
+        var btn = $("#themeToggle");
+        if (btn) btn.click();
+      } else if (k === "/") {
+        var box = $("#postSearch") || $("#resSearch");
+        if (box) { e.preventDefault(); box.focus(); }
+      } else if (k === "t") {
+        scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+      }
+    });
+  })();
+
+  /* ---------- 15. 外链自动新窗口打开 ---------- */
+  (function externalLinks() {
+    $$("a[href^='http']").forEach(function (a) {
+      if (a.hostname && a.hostname !== location.hostname && !a.target) {
+        a.target = "_blank";
+        a.rel = "noopener";
+      }
+    });
+  })();
+
+  /* ---------- 16. 文章预计阅读时长 ---------- */
+  (function readingTime() {
+    var body = $(".post-body");
+    var meta = $(".post-header .p-meta");
+    if (!body || !meta) return;
+    var text = body.innerText || "";
+    var cn = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+    var en = (text.replace(/[\u4e00-\u9fa5]/g, " ").match(/[a-zA-Z]+/g) || []).length;
+    var mins = Math.max(1, Math.round(cn / 400 + en / 220));
+    if (meta.textContent.indexOf("阅读") < 0) {
+      meta.textContent = meta.textContent.replace(/\s*$/, "") + " · 阅读约 " + mins + " 分钟";
+    }
+  })();
+
+  /* ---------- 17. 文章自动目录（桌面侧边悬浮） ---------- */
+  (function toc() {
+    var body = $(".post-body");
+    if (!body) return;
+    var heads = Array.prototype.slice.call(body.querySelectorAll("h2"));
+    if (heads.length < 3 || !matchMedia("(min-width: 1180px)").matches) return;
+
+    heads.forEach(function (h, i) {
+      if (!h.id) h.id = "sec-" + i;
+    });
+
+    var box = document.createElement("aside");
+    box.className = "toc";
+    box.innerHTML = '<div class="toc-title">本页目录</div>';
+    var ul = document.createElement("ul");
+    heads.forEach(function (h, i) {
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + (h.id || "sec-" + i);
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+    document.body.appendChild(box);
+
+    var links = Array.prototype.slice.call(ul.querySelectorAll("a"));
+    addEventListener("scroll", function () {
+      var idx = 0;
+      heads.forEach(function (h, i) {
+        if (h.getBoundingClientRect().top < 160) idx = i;
+      });
+      links.forEach(function (a, i) { a.classList.toggle("on", i === idx); });
+    }, { passive: true });
+  })();
+
+  /* ---------- 18. 页面载入淡入 ---------- */
+  (function fadeIn() {
+    if (reduceMotion) { document.body.classList.add("loaded"); return; }
+    requestAnimationFrame(function () { document.body.classList.add("loaded"); });
+  })();
+
+  /* ---------- 20. 移动端省流量：视频降级 + 首屏动画降频 ---------- */
+  (function mobileSaver() {
+    var v = $(".hero-video");
+    if (!v) return;
+    if (matchMedia("(max-width: 560px)").matches ||
+        (navigator.connection && /2g|slow/.test(navigator.connection.effectiveType || ""))) {
+      v.setAttribute("preload", "metadata");
+      // 弱网/手机：暂停播放，只保留海报帧
+      if (navigator.connection && /2g|slow/.test(navigator.connection.effectiveType || "")) {
+        v.removeAttribute("autoplay");
+        v.pause();
+      }
+    }
+  })();
+
+  /* ---------- 21. 首屏视频加载失败时回退到渐变 ---------- */
+  (function videoFallback() {
+    var v = $(".hero-video");
+    if (!v) return;
+    v.addEventListener("error", function () {
+      v.style.display = "none";
+      var hero = $(".hero");
+      if (hero) hero.classList.add("no-video");
+    });
+  })();
+
+  /* ---------- 22. 文章底部「上一篇 / 下一篇」快速切换 ---------- */
+  (function prevNext() {
+    var links = Array.prototype.slice.call(document.querySelectorAll(".post-nav a[data-nav]"));
+    if (!links.length) return;
+    links.forEach(function (a) {
+      var cur = (location.pathname.split("/").pop() || "").toLowerCase();
+      if ((a.getAttribute("href") || "").toLowerCase().indexOf(cur) === 0) {
+        a.classList.add("current");
+      }
+    });
+  })();
+
+  /* ---------- 19. 页脚时钟 ---------- */
   (function clock() {
     var el = $("#clock");
     if (!el) return;

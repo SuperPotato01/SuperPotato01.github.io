@@ -1559,7 +1559,284 @@ input:focus-visible {
   background: #101828;
 }
 
-/* ---------- 404 页 ---------- */
+/* ============================================================
+   v5 精修层
+   ============================================================ */
+
+/* ---------- 导航隐藏过渡 ---------- */
+.nav {
+  transition: transform 0.3s ease, background 0.35s ease;
+}
+
+/* ---------- 页面载入淡入 ---------- */
+body {
+  opacity: 0;
+  animation: body-in 0.5s ease forwards;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+@keyframes body-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ---------- 首屏视频缓慢推近（Ken Burns） ---------- */
+.hero-video {
+  animation: kenburns 26s ease-in-out infinite alternate;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1) translate(0, 0); }
+  to   { transform: scale(1.09) translate(-1%, -1%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video { animation: none; }
+}
+
+/* ---------- 区块标签渐变流动 ---------- */
+.section-label {
+  background-size: 200% 100%;
+  animation: gradient-slide 6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-label { animation: none; }
+}
+
+/* ---------- 作品卡分色发光（青 / 紫交替） ---------- */
+.work-card:nth-child(odd):hover {
+  outline-color: rgba(59, 111, 212, 0.4);
+  box-shadow: 0 16px 44px -16px rgba(59, 111, 212, 0.45);
+}
+
+.work-card:nth-child(even):hover {
+  outline-color: rgba(123, 92, 230, 0.4);
+  box-shadow: 0 16px 44px -16px rgba(123, 92, 230, 0.45);
+}
+
+/* 首张卡标注「代表作」 */
+.work-card:first-child::after {
+  content: "代表作";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--grad);
+}
+
+/* ---------- 时间线改为渐变轴 ---------- */
+.timeline {
+  border-left: 2px solid transparent;
+  border-image: linear-gradient(180deg, var(--accent), rgba(123, 92, 230, 0.25)) 1;
+}
+
+/* ---------- 技能条悬停高亮 ---------- */
+.skill-bar:hover .sb-fill {
+  filter: brightness(1.15) saturate(1.1);
+}
+
+.sb-fill {
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.2s;
+}
+
+/* ---------- 按钮按下反馈 ---------- */
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* ---------- 文章列表悬停位移 ---------- */
+.post-item {
+  transition: padding-left 0.25s ease, background 0.25s ease;
+}
+
+.post-item:hover {
+  padding-left: 12px;
+  background: linear-gradient(90deg, var(--accent-soft), transparent 60%);
+  border-radius: 8px;
+}
+
+/* ---------- 资源卡悬停显示箭头 ---------- */
+.res-card::after {
+  content: "↗";
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--text-dim);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.res-card:hover::after {
+  opacity: 1;
+  color: var(--accent);
+}
+
+/* ---------- 页脚渐变上边框 ---------- */
+.footer {
+  border-top: 2px solid transparent;
+  border-image: linear-gradient(90deg, transparent, rgba(59, 111, 212, 0.5), rgba(123, 92, 230, 0.5), transparent) 1;
+}
+
+/* ---------- 选中文字渐变 ---------- */
+::selection {
+  background: linear-gradient(120deg, rgba(59, 111, 212, 0.25), rgba(123, 92, 230, 0.25));
+}
+
+/* ---------- 文章自动目录（桌面） ---------- */
+.toc {
+  position: fixed;
+  left: max(16px, calc(50% - 620px));
+  top: 130px;
+  width: 190px;
+  z-index: 40;
+  font-size: 12.5px;
+  border-left: 2px solid var(--line);
+  padding-left: 14px;
+}
+
+.toc-title {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc li {
+  margin-bottom: 7px;
+  line-height: 1.5;
+}
+
+.toc a {
+  color: var(--text-dim);
+  transition: all 0.18s;
+}
+
+.toc a:hover,
+.toc a.on {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ---------- 跳转链接（无障碍） ---------- */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 200;
+  padding: 8px 16px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+}
+
+.skip-link:focus {
+  left: 16px;
+}
+
+/* ---------- 手机端首屏数据条两列 ---------- */
+@media (max-width: 560px) {
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 14px;
+    width: 100%;
+  }
+}
+
+/* ---------- 文章底部上下篇导航 ---------- */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 26px;
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.post-nav a {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  max-width: 46%;
+  transition: color 0.18s;
+}
+
+.post-nav a:hover {
+  color: var(--accent);
+}
+
+.post-nav a.current {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* ---------- 视频不可用时的首屏兜底 ---------- */
+.hero.no-video {
+  background:
+    radial-gradient(700px 380px at 85% -10%, rgba(123, 92, 230, 0.35), transparent 65%),
+    radial-gradient(600px 340px at -10% 110%, rgba(59, 111, 212, 0.4), transparent 60%),
+    linear-gradient(160deg, #0c1526 0%, #101d38 60%, #131f3c 100%);
+}
+
+/* ---------- 打印样式（导出 PDF / 简历） ---------- */
+@media print {
+  .nav, .to-top, .cursor-glow, .scroll-hint, .tech-marquee,
+  .hero-video, .hero-veil, .footer-links, .toc {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    opacity: 1 !important;
+  }
+
+  .hero {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 20px 0;
+  }
+
+  .hero h1, .hero p, .hero-eyebrow {
+    color: #000 !important;
+  }
+
+  .hero-stats b {
+    color: #000 !important;
+    -webkit-text-fill-color: #000;
+  }
+
+  .section, .contact-box {
+    padding: 18px 0 !important;
+    break-inside: avoid;
+  }
+
+  .contact-box {
+    background: #f2f4f8 !important;
+    color: #000 !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
 .nf-page {
   min-height: 100vh;
   display: grid;
