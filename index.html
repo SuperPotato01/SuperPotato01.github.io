@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>土豆 · 嵌入式工程师</title>
   <meta name="description" content="土豆，3 年嵌入式软件工程师。和单片机、RTOS、总线协议打交道，关注代码可靠性与系统每一微安电流。">
+  <meta name="theme-color" content="#0c1526">
+  <meta property="og:title" content="土豆 · 嵌入式工程师">
+  <meta property="og:description" content="3 年嵌入式软件工程师，MCU / RTOS / 物联网 / 边缘 AI。">
+  <meta property="og:type" content="website">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233b6fd4'/%3E%3Cstop offset='1' stop-color='%237b5ce6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext x='32' y='43' font-size='28' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3E%E5%9C%9F%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+
+  <!-- 光标光晕（桌面端） -->
+  <div class="cursor-glow" aria-hidden="true"></div>
 
   <!-- ===== 导航 ===== -->
   <nav class="nav">
@@ -18,23 +25,26 @@
         <a href="#about">关于</a>
         <a href="#work">作品</a>
         <a href="blog.html">博客</a>
+        <a href="resources.html">资源库</a>
         <a href="#contact">联系</a>
       </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
     </div>
   </nav>
 
   <!-- ===== 首屏 ===== -->
   <header class="hero">
-    <!-- 科幻地球夜景视频背景（静音自动循环，移动端兼容 playsinline） -->
     <video class="hero-video" autoplay muted loop playsinline preload="auto"
           poster="assets/earth-poster.jpg" aria-hidden="true">
       <source src="assets/earth-bg.mp4" type="video/mp4">
     </video>
-    <!-- 渐变蒙版：压暗视频保证文字可读 -->
     <div class="hero-veil" aria-hidden="true"></div>
     <div class="container">
       <div class="hero-eyebrow">欢迎来到我的个人站</div>
-      <h1>你好，我是土豆<br>做<em>嵌入式系统开发</em></h1>
+      <h1>你好，我是土豆<br>做<em id="heroRotator" data-words="嵌入式系统开发|可靠的固件|低功耗设计|端侧 AI 实验">嵌入式系统开发</em></h1>
       <p>
         三年嵌入式软件工程师，日常和单片机、RTOS、示波器打交道。
         在意代码的可靠性，也在意系统的每一微安电流。
@@ -45,18 +55,30 @@
         <a href="blog.html" class="btn btn-ghost">阅读博客</a>
       </div>
 
-      <!-- 数据条 -->
       <div class="hero-stats reveal">
-        <div><b>3 年</b><span>工作经验</span></div>
-        <div><b>2 款</b><span>主导量产</span></div>
-        <div><b>5000+</b><span>设备在网</span></div>
+        <div><b data-count="3" data-suffix=" 年">3 年</b><span>工作经验</span></div>
+        <div><b data-count="2" data-suffix=" 款">2 款</b><span>主导量产</span></div>
+        <div><b data-count="5000" data-suffix="+">5000+</b><span>设备在网</span></div>
         <div><b>C / RTOS</b><span>主力技术</span></div>
       </div>
     </div>
 
-    <!-- 下滑提示 -->
     <div class="scroll-hint" aria-hidden="true">SCROLL</div>
   </header>
+
+  <!-- ===== 技术走马灯 ===== -->
+  <div class="tech-marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span><b>C / C++</b></span><span>FreeRTOS</span><span><b>STM32</b></span><span>UART / SPI / I2C</span>
+      <span><b>CAN</b></span><span>LoRa</span><span><b>MQTT</b></span><span>OTA</span>
+      <span><b>Linux</b></span><span>Python</span><span><b>LVGL</b></span><span>FOC</span>
+      <span><b>PCB</b></span><span>DeepSeek</span><span><b>YOLO</b></span><span>Git</span>
+      <span><b>C / C++</b></span><span>FreeRTOS</span><span><b>STM32</b></span><span>UART / SPI / I2C</span>
+      <span><b>CAN</b></span><span>LoRa</span><span><b>MQTT</b></span><span>OTA</span>
+      <span><b>Linux</b></span><span>Python</span><span><b>LVGL</b></span><span>FOC</span>
+      <span><b>PCB</b></span><span>DeepSeek</span><span><b>YOLO</b></span><span>Git</span>
+    </div>
+  </div>
 
   <main>
 
@@ -101,6 +123,34 @@
               <span class="tag">MQTT</span>
               <span class="tag">Keil / IAR</span>
               <span class="tag">Python</span>
+            </div>
+
+            <div class="skills-title">熟练度</div>
+            <div class="skill-bars">
+              <div class="skill-bar">
+                <div class="sb-head"><span>C / C++</span><span>90%</span></div>
+                <div class="sb-track"><div class="sb-fill" style="--w:90%"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="sb-head"><span>FreeRTOS / RT-Thread</span><span>86%</span></div>
+                <div class="sb-track"><div class="sb-fill" style="--w:86%"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="sb-head"><span>STM32 外设驱动</span><span>84%</span></div>
+                <div class="sb-track"><div class="sb-fill" style="--w:84%"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="sb-head"><span>总线协议 / 物联网</span><span>78%</span></div>
+                <div class="sb-track"><div class="sb-fill" style="--w:78%"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="sb-head"><span>Linux / 构建工具链</span><span>66%</span></div>
+                <div class="sb-track"><div class="sb-fill" style="--w:66%"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="sb-head"><span>Python 工具开发</span><span>62%</span></div>
+                <div class="sb-track"><div class="sb-fill" style="--w:62%"></div></div>
+              </div>
             </div>
 
             <div class="skills-title">经历</div>
@@ -199,19 +249,19 @@
         </div>
 
         <ul class="post-list reveal">
-          <li class="post-item">
+          <li class="post-item" data-tags="教程,部署">
             <div class="p-date">2026-10-25</div>
             <h3><a href="posts/hello-world.html">如何从零搭一个个人网站</a></h3>
             <p>从买域名到上线，把整个流程拆成几步讲清楚，包含容易踩的坑。本站就是这么来的。</p>
             <div class="post-tags"><span>教程</span><span>部署</span></div>
           </li>
-          <li class="post-item">
+          <li class="post-item" data-tags="FreeRTOS,调试">
             <div class="p-date">2026-08-14</div>
             <h3><a href="posts/freertos-tasks.html">FreeRTOS 任务优先级里那些我踩过的坑</a></h3>
             <p>优先级翻转、栈溢出、饿死低优先级任务——三个真实事故的排查过程。</p>
             <div class="post-tags"><span>FreeRTOS</span><span>调试</span></div>
           </li>
-          <li class="post-item">
+          <li class="post-item" data-tags="串口,日志">
             <div class="p-date">2026-05-30</div>
             <h3><a href="posts/serial-debug.html">串口调试：printf 背后到底发生了什么</a></h3>
             <p>从重定向 fputc 到 DMA 环形缓冲，聊聊日志系统怎么做才不拖慢实时任务。</p>
@@ -221,6 +271,7 @@
 
         <div class="btn-row reveal" style="margin-top: 30px;">
           <a href="blog.html" class="btn btn-ghost">查看全部文章</a>
+          <a href="resources.html" class="btn btn-ghost">浏览资源库 →</a>
         </div>
       </div>
     </section>
@@ -233,6 +284,7 @@
           <p>有想做的项目、想讨论的问题，或者只是想打个招呼。</p>
           <div class="contact-links">
             <a href="mailto:2964798599@qq.com" class="btn btn-primary">发邮件给我</a>
+            <button class="btn btn-ghost" id="copyMail" data-mail="2964798599@qq.com">复制邮箱</button>
             <a href="https://github.com/SuperPotato01" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
             <a href="cyberpunk-panel.html" class="btn btn-ghost">System Online ↗</a>
           </div>
@@ -251,72 +303,14 @@
         <a href="index.html#about">关于</a>
         <a href="index.html#work">作品</a>
         <a href="blog.html">博客</a>
+        <a href="resources.html">资源库</a>
         <a href="cyberpunk-panel.html">System Online</a>
         <a href="https://github.com/SuperPotato01" target="_blank" rel="noopener">GitHub</a>
       </div>
-      <p>© 2026 土豆 · 本站使用纯 HTML + CSS 构建</p>
+      <p>© 2026 土豆 · 本站使用纯 HTML + CSS 构建<span class="footer-clock" id="clock"></span></p>
     </div>
   </footer>
 
-  <script>
-    // 滚动入场动画：给 .reveal 元素进入视口时加 .visible
-    (function () {
-      var els = document.querySelectorAll('.reveal');
-      if (!('IntersectionObserver' in window)) {
-        els.forEach(function (el) { el.classList.add('visible'); });
-        return;
-      }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            io.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      els.forEach(function (el) { io.observe(el); });
-    })();
-
-    // 返回顶部按钮：滚过 600px 显示
-    (function () {
-      var btn = document.getElementById('toTop');
-      var ticking = false;
-      addEventListener('scroll', function () {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(function () {
-          btn.classList.toggle('show', scrollY > 600);
-          ticking = false;
-        });
-      });
-      btn.addEventListener('click', function () {
-        scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    })();
-
-    // 导航滚动高亮（scrollspy）：当前区块对应导航项点亮
-    (function () {
-      var links = document.querySelectorAll('.nav-links a[href^="#"]');
-      var map = {};
-      links.forEach(function (a) {
-        var sec = document.querySelector(a.getAttribute('href'));
-        if (sec) map[a.getAttribute('href').slice(1)] = a;
-      });
-      var spy = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          var link = map[e.target.id];
-          if (!link) return;
-          if (e.isIntersecting) {
-            links.forEach(function (a) { a.classList.remove('active'); });
-            link.classList.add('active');
-          }
-        });
-      }, { rootMargin: '-40% 0px -55% 0px' });
-      Object.keys(map).forEach(function (id) {
-        spy.observe(document.getElementById(id));
-      });
-    })();
-  </script>
-
+  <script src="assets/app.js"></script>
 </body>
 </html>

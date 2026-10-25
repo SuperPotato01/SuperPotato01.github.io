@@ -17,8 +17,13 @@
         <a href="../index.html#about">关于</a>
         <a href="../index.html#work">作品</a>
         <a href="../blog.html" class="active">博客</a>
+        <a href="../resources.html">资源库</a>
         <a href="../index.html#contact">联系</a>
       </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
     </div>
   </nav>
 
@@ -110,15 +115,5 @@
   </footer>
 
 </body>
-<script>
-  // 阅读进度条
-  (function () {
-    var bar = document.getElementById('readProgress');
-    addEventListener('scroll', function () {
-      var h = document.documentElement;
-      var pct = scrollY / (h.scrollHeight - h.clientHeight) * 100;
-      bar.style.width = pct.toFixed(1) + '%';
-    }, { passive: true });
-  })();
-</script>
+  <script src="../assets/app.js"></script>
 </html>

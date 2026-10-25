@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>资源库 · 土豆</title>
+  <meta name="description" content="嵌入式、RTOS、物联网、边缘 AI 常用资料与工具收藏。">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">土豆<span>.</span></a>
+      <div class="nav-links">
+        <a href="index.html#about">关于</a>
+        <a href="index.html#work">作品</a>
+        <a href="blog.html">博客</a>
+        <a href="resources.html" class="active">资源库</a>
+        <a href="index.html#contact">联系</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <header class="post-header">
+    <div class="container">
+      <a href="index.html" class="back-link">&larr; 返回首页</a>
+      <h1 style="font-size: 30px; margin-top: 14px;">资源库</h1>
+      <div class="p-meta">日常收藏的技术资料与工具 · 共 71 条 · 10 个方向</div>
+    </div>
+  </header>
+
+  <main class="container" style="padding-bottom: 76px;">
+    <div class="blog-tools">
+      <div class="search-box">
+        <input type="search" id="resSearch" placeholder="搜索站点名或域名…" aria-label="搜索资源">
+      </div>
+    </div>
+    <div class="blog-tools" style="margin-top: 0;">
+      <button class="tag-chip active" data-cat="*">全部</button>
+      <button class="tag-chip" data-cat="MCU · 嵌入式开发">MCU · 嵌入式开发 · 17</button>
+      <button class="tag-chip" data-cat="常用工具 & 其他">常用工具 & 其他 · 14</button>
+      <button class="tag-chip" data-cat="开发平台 & 社区">开发平台 & 社区 · 7</button>
+      <button class="tag-chip" data-cat="语言 · 算法 · 基础">语言 · 算法 · 基础 · 6</button>
+      <button class="tag-chip" data-cat="大模型 & AI 工具">大模型 & AI 工具 · 6</button>
+      <button class="tag-chip" data-cat="深度学习 · 边缘 AI">深度学习 · 边缘 AI · 6</button>
+      <button class="tag-chip" data-cat="实时系统 · RTOS">实时系统 · RTOS · 4</button>
+      <button class="tag-chip" data-cat="外设 · 驱动 · 图形">外设 · 驱动 · 图形 · 4</button>
+      <button class="tag-chip" data-cat="硬件 · PCB · 开发板">硬件 · PCB · 开发板 · 4</button>
+      <button class="tag-chip" data-cat="物联网 · 通信协议">物联网 · 通信协议 · 3</button>
+    </div>
+
+    <div id="resList">
+    <section class="res-group">
+      <h2>MCU · 嵌入式开发 <em>17</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://www.keil.arm.com/packs/gd32c10x_dfp-gigadevice/devices/" target="_blank" rel="noopener">
+          <div class="res-tile">A</div>
+          <div class="res-meta">
+            <strong>Arm Keil | GigaDevice GD32C10x_DFP</strong>
+            <span>keil.arm.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://bbs.huaweicloud.com/blogs/308557" target="_blank" rel="noopener">
+          <div class="res-tile">H</div>
+          <div class="res-meta">
+            <strong>HarmonyOS开发板NFC碰一碰完成动态配置-云社区-华为云</strong>
+            <span>bbs.huaweicloud.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://blog.csdn.net/weixin_44788542/article/details/127537956" target="_blank" rel="noopener">
+          <div class="res-tile">K</div>
+          <div class="res-meta">
+            <strong>Keil MDK的sct分散加载文件详解_keil sct-CSDN博客</strong>
+            <span>blog.csdn.net</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://gitee.com/bearpi/bearpi-hm_nano/issues/I496Q0" target="_blank" rel="noopener">
+          <div class="res-tile">N</div>
+          <div class="res-meta">
+            <strong>NFC碰一碰配网 · Issue #I496Q0 · 小熊派开源社区/BearPi-HM_Nano - Gitee.com</strong>
+            <span>gitee.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/eziya/STM32_SPI_SDCARD/blob/master/STM32F4_HAL_SPI_SDCARD/Src/fatfs_sd.c" target="_blank" rel="noopener">
+          <div class="res-tile">S</div>
+          <div class="res-meta">
+            <strong>STM32_SPI_SDCARD/STM32F4_HAL_SPI_SDCARD/Src/fatfs_sd.c at master · eziya/STM32_SPI_SDCARD</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://kimi.moonshot.cn/chat/cpcm6gqvk6geotam8nqg?data_source=tracer&utm_campaign=TR_PbzLg2eV&utm_content=&utm_medium=%E5%BE%AE%E8%BD%AFbing&utm_source=bing&utm_term=&msclkid=c151897d347e16984233ef2456a51bfe" target="_blank" rel="noopener">
+          <div class="res-tile">K</div>
+          <div class="res-meta">
+            <strong>kimi</strong>
+            <span>kimi.moonshot.cn</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/libdriver" target="_blank" rel="noopener">
+          <div class="res-tile">L</div>
+          <div class="res-meta">
+            <strong>libdriver (LibDriver)</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://gitee.com/DinoHaw/mOTA" target="_blank" rel="noopener">
+          <div class="res-tile">M</div>
+          <div class="res-meta">
+            <strong>mOTA: 一款专为32位MCU开发的OTA组件</strong>
+            <span>gitee.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/Staok/u-iap/blob/main/README.md" target="_blank" rel="noopener">
+          <div class="res-tile">U</div>
+          <div class="res-meta">
+            <strong>u-iap/README.md at main · Staok/u-iap</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://discuss.em-ide.com/d/441-clangdeide" target="_blank" rel="noopener">
+          <div class="res-tile">关</div>
+          <div class="res-meta">
+            <strong>关于clangd与eide的问题 - Embedded IDE Forum</strong>
+            <span>discuss.em-ide.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://bbs.huaweicloud.com/blogs/308448" target="_blank" rel="noopener">
+          <div class="res-tile">华</div>
+          <div class="res-meta">
+            <strong>华为云IoT API Explorer对接小程序实现系统化应用-云社区-华为云</strong>
+            <span>bbs.huaweicloud.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://blog.csdn.net/APP_xinyonghu_li/article/details/135147839" target="_blank" rel="noopener">
+          <div class="res-tile">单</div>
+          <div class="res-meta">
+            <strong>单片机二进制bin（map、反汇编）文件分析（IAP程序跳转，PC指针指向问题分析）_怎么分析bin文件数据代表的什么意思-CSDN博客</strong>
+            <span>blog.csdn.net</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://gitee.com/bearpi/bearpi-hm_nano" target="_blank" rel="noopener">
+          <div class="res-tile">小</div>
+          <div class="res-meta">
+            <strong>小熊派</strong>
+            <span>gitee.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://youyeetoo.cn/forum.php?mod=viewthread&tid=5379&highlight=%E5%B0%8F%E7%86%8A" target="_blank" rel="noopener">
+          <div class="res-tile">小</div>
+          <div class="res-meta">
+            <strong>小熊派BearPi-HM Nano资料链接 - RISC-V平台开发板(K210/K510) - 深圳风火轮科技</strong>
+            <span>youyeetoo.cn</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://youyeetoo.cn/forum.php?mod=viewthread&tid=5501&highlight=%E5%B0%8F%E7%86%8A" target="_blank" rel="noopener">
+          <div class="res-tile">小</div>
+          <div class="res-meta">
+            <strong>小熊派资料 - 开发板使用 - 深圳风火轮科技</strong>
+            <span>youyeetoo.cn</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://pyocd.io/docs/configuration.html#config-file" target="_blank" rel="noopener">
+          <div class="res-tile">配</div>
+          <div class="res-meta">
+            <strong>配置 — pyOCD</strong>
+            <span>pyocd.io</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://openocd.org/doc-release/html/Config-File-Guidelines.html#Config-File-Guidelines" target="_blank" rel="noopener">
+          <div class="res-tile">配</div>
+          <div class="res-meta">
+            <strong>配置文件指南 （OpenOCD 用户指南）</strong>
+            <span>openocd.org</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>常用工具 & 其他 <em>14</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://no-chicken.xyz/OV-Watch/4.%E8%BD%AF%E4%BB%B6%E6%A1%86%E6%9E%B6.html" target="_blank" rel="noopener">
+          <div class="res-tile">4</div>
+          <div class="res-meta">
+            <strong>4.软件框架 · 手册</strong>
+            <span>no-chicken.xyz</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://haowallpaper.com/homeViewLook/15053605318659392" target="_blank" rel="noopener">
+          <div class="res-tile">4</div>
+          <div class="res-meta">
+            <strong>4k0二次元壁纸-不屑图片-《免费下载》「哲风壁纸」</strong>
+            <span>haowallpaper.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.google.com/" target="_blank" rel="noopener">
+          <div class="res-tile">G</div>
+          <div class="res-meta">
+            <strong>Google</strong>
+            <span>google.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://tool.lu/ip/" target="_blank" rel="noopener">
+          <div class="res-tile">I</div>
+          <div class="res-meta">
+            <strong>IP地址查询 - 在线工具</strong>
+            <span>tool.lu</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.infoq.cn/u/tango/publish?utm_term=geek_search_source&utm_campaign=geek_search_source&utm_source=geek_search_source&utm_content=geek_search_source&utm_medium=geek_search_source" target="_blank" rel="noopener">
+          <div class="res-tile">I</div>
+          <div class="res-meta">
+            <strong>IT蜗壳-Tango</strong>
+            <span>infoq.cn</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.moakt.com/" target="_blank" rel="noopener">
+          <div class="res-tile">M</div>
+          <div class="res-meta">
+            <strong>Moakt Email || 临时邮箱专业服务</strong>
+            <span>moakt.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://haowallpaper.com/" target="_blank" rel="noopener">
+          <div class="res-tile">免</div>
+          <div class="res-meta">
+            <strong>免费4K高清壁纸-电脑背景图片-Mac壁纸网站「哲风壁纸」</strong>
+            <span>haowallpaper.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://tophix.com/zh-cn/" target="_blank" rel="noopener">
+          <div class="res-tile">免</div>
+          <div class="res-meta">
+            <strong>免费且易于使用的在线工具 - Tophix</strong>
+            <span>tophix.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://easygif.cn/to_gif/picture" target="_blank" rel="noopener">
+          <div class="res-tile">图</div>
+          <div class="res-meta">
+            <strong>图片转GIF</strong>
+            <span>easygif.cn</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.gongjugou.com/" target="_blank" rel="noopener">
+          <div class="res-tile">工</div>
+          <div class="res-meta">
+            <strong>工具狗官网-在线工具箱-免费实用工具大全</strong>
+            <span>gongjugou.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://libgen.is/" target="_blank" rel="noopener">
+          <div class="res-tile">库</div>
+          <div class="res-meta">
+            <strong>库创世纪</strong>
+            <span>libgen.is</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://console.huaweicloud.com/console/?region=cn-north-4#/home" target="_blank" rel="noopener">
+          <div class="res-tile">控</div>
+          <div class="res-meta">
+            <strong>控制台</strong>
+            <span>console.huaweicloud.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://easygif.cn/to_gif/video" target="_blank" rel="noopener">
+          <div class="res-tile">视</div>
+          <div class="res-meta">
+            <strong>视频转GIF</strong>
+            <span>easygif.cn</span>
+          </div>
+        </a>
+        <a class="res-card" href="http://wenzheng.club/" target="_blank" rel="noopener">
+          <div class="res-tile">阿</div>
+          <div class="res-meta">
+            <strong>阿正的个人站</strong>
+            <span>wenzheng.club</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>开发平台 & 社区 <em>7</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://github.com/" target="_blank" rel="noopener">
+          <div class="res-tile">G</div>
+          <div class="res-meta">
+            <strong>GitHub</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://nonebot.dev/" target="_blank" rel="noopener">
+          <div class="res-tile">N</div>
+          <div class="res-meta">
+            <strong>NoneBot 机器人</strong>
+            <span>nonebot.dev</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/albfan/miraclecast" target="_blank" rel="noopener">
+          <div class="res-tile">A</div>
+          <div class="res-meta">
+            <strong>albfan/miraclecast：通过 Wifi-Display 规范（也称为 Miracast）将外部显示器连接到您的系统</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://wiki.deepin.org/zh/04_%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98FAQ/find%E5%91%BD%E4%BB%A4%E6%9F%A5%E6%89%BE%E6%8A%80%E5%B7%A7" target="_blank" rel="noopener">
+          <div class="res-tile">F</div>
+          <div class="res-meta">
+            <strong>find命令查找技巧 | DeepinWiki</strong>
+            <span>wiki.deepin.org</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/nonebot/adapter-qq" target="_blank" rel="noopener">
+          <div class="res-tile">N</div>
+          <div class="res-meta">
+            <strong>nonebot/adapter-qq： NoneBot2 QQ 适配器 / 用于 nonebot2 的 QQ 适配器</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://gitee.com/" target="_blank" rel="noopener">
+          <div class="res-tile">工</div>
+          <div class="res-meta">
+            <strong>工作台 - Gitee.com</strong>
+            <span>gitee.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://gitee.com/pengfeihou/OneHop" target="_blank" rel="noopener">
+          <div class="res-tile">碰</div>
+          <div class="res-meta">
+            <strong>碰一碰: 碰一碰开发</strong>
+            <span>gitee.com</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>语言 · 算法 · 基础 <em>6</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://www.asciim.cn/" target="_blank" rel="noopener">
+          <div class="res-tile">A</div>
+          <div class="res-meta">
+            <strong>ASCII码 - 基本ASCII码和扩展ASCII码,中文最全ASCII码对照表0~255</strong>
+            <span>asciim.cn</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/krahets/LeetCode-Book" target="_blank" rel="noopener">
+          <div class="res-tile">K</div>
+          <div class="res-meta">
+            <strong>krahets/LeetCode-Book: 《剑指 Offer》 Python, Java, C++ 解题代码，LeetBook《图解算法数据结构》配套代码仓</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://gitee.com/wenzhengclub/Seven_Day_Android_Learn" target="_blank" rel="noopener">
+          <div class="res-tile">W</div>
+          <div class="res-meta">
+            <strong>wenzheng/7天Java0基础速成安卓开发 - 码云 - 开源中国</strong>
+            <span>gitee.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://blog.csdn.net/qq_41523096/article/details/104399717" target="_blank" rel="noopener">
+          <div class="res-tile">值</div>
+          <div class="res-meta">
+            <strong>值得学习17个C/C++ 超经典开源项目，面试加分_c语言开源项目 必读-CSDN博客</strong>
+            <span>blog.csdn.net</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.hello-algo.com/chapter_hello_algo/" target="_blank" rel="noopener">
+          <div class="res-tile">序</div>
+          <div class="res-meta">
+            <strong>序 - Hello 算法</strong>
+            <span>hello-algo.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.runoob.com/" target="_blank" rel="noopener">
+          <div class="res-tile">菜</div>
+          <div class="res-meta">
+            <strong>菜鸟教程 - 学的不仅是技术，更是梦想！</strong>
+            <span>runoob.com</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>大模型 & AI 工具 <em>6</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://chatgpt.com/" target="_blank" rel="noopener">
+          <div class="res-tile">C</div>
+          <div class="res-meta">
+            <strong>ChatGPT</strong>
+            <span>chatgpt.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://chatgpt.com/?oai-dm=1" target="_blank" rel="noopener">
+          <div class="res-tile">C</div>
+          <div class="res-meta">
+            <strong>ChatGPT</strong>
+            <span>chatgpt.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://chat.deepseek.com/" target="_blank" rel="noopener">
+          <div class="res-tile">D</div>
+          <div class="res-meta">
+            <strong>DeepSeek - 探索未至之境</strong>
+            <span>chat.deepseek.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/zhayujie/chatgpt-on-wechat" target="_blank" rel="noopener">
+          <div class="res-tile">Z</div>
+          <div class="res-meta">
+            <strong>zhayujie/chatgpt-on-wechat: 基于大模型搭建的聊天机器人，同时支持 微信 公众号、企业微信应用、飞书、钉钉 等接入，可选择GPT3.5/GPT4.0/Claude/文心一言/讯飞星火/通义千问/Gemini/GLM-4/Claude/Kimi/LinkAI，能处理文本、语音和图片，访问操作系统和互联网，支持基于自有知识库进行定制企业智能客服。</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://yiyan.baidu.com/" target="_blank" rel="noopener">
+          <div class="res-tile">文</div>
+          <div class="res-meta">
+            <strong>文心一言</strong>
+            <span>yiyan.baidu.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://tongyi.aliyun.com/qianwen/?sessionId=730ee6128a324e87beddbc51c5d6ca7b" target="_blank" rel="noopener">
+          <div class="res-tile">通</div>
+          <div class="res-meta">
+            <strong>通义</strong>
+            <span>tongyi.aliyun.com</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>深度学习 · 边缘 AI <em>6</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://www.yahboom.com/build.html?id=5921&cid=553" target="_blank" rel="noopener">
+          <div class="res-tile">1</div>
+          <div class="res-meta">
+            <strong>1、使用yolov5训练交通标志</strong>
+            <span>yahboom.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://blog.csdn.net/zhou_438/article/details/112846704" target="_blank" rel="noopener">
+          <div class="res-tile">P</div>
+          <div class="res-meta">
+            <strong>python版openvino使用_使用openvino python-CSDN博客</strong>
+            <span>blog.csdn.net</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://blog.csdn.net/ECHOSON/article/details/129560401" target="_blank" rel="noopener">
+          <div class="res-tile">【</div>
+          <div class="res-meta">
+            <strong>【2023-Pytorch-检测教程】手把手教你使用YOLOV5做电线绝缘子缺陷检测_yolov5 电力-CSDN博客</strong>
+            <span>blog.csdn.net</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://blog.csdn.net/qq_44231797/article/details/133270195" target="_blank" rel="noopener">
+          <div class="res-tile">树</div>
+          <div class="res-meta">
+            <strong>树莓派部署YOLOv5目标检测（详细篇）_yolov5部署树莓派-CSDN博客</strong>
+            <span>blog.csdn.net</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://blog.csdn.net/qq_58114029/article/details/131879413" target="_blank" rel="noopener">
+          <div class="res-tile">第</div>
+          <div class="res-meta">
+            <strong>第18届全国大学生智能汽车竞赛四轮车开源讲解_【第18届全国大学生智能汽车竞赛四轮车开源讲解【3】--边线提取 - csdn app】-CSDN博客</strong>
+            <span>blog.csdn.net</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/Qengineering/RPi-Bullseye-DNN-image/issues" target="_blank" rel="noopener">
+          <div class="res-tile">问</div>
+          <div class="res-meta">
+            <strong>问题 ·Qengineering/RPi-Bullseye-DNN-image（英语：Qengineering/RPi-Bullseye-DNN-image）</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>实时系统 · RTOS <em>4</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://blog.csdn.net/zhzht19861011/article/details/50134883" target="_blank" rel="noopener">
+          <div class="res-tile">F</div>
+          <div class="res-meta">
+            <strong>FreeRTOS系列第6篇---FreeRTOS内核配置说明_vassertcalled-CSDN博客</strong>
+            <span>blog.csdn.net</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.rt-thread.org/document/site/#/" target="_blank" rel="noopener">
+          <div class="res-tile">R</div>
+          <div class="res-meta">
+            <strong>RT-Thread 文档中心</strong>
+            <span>rt-thread.org</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/RT-Thread-packages" target="_blank" rel="noopener">
+          <div class="res-tile">R</div>
+          <div class="res-meta">
+            <strong>RT-Thread 的包仓库。</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://github.com/RT-Thread/rt-thread/blob/master/README_zh.md" target="_blank" rel="noopener">
+          <div class="res-tile">R</div>
+          <div class="res-meta">
+            <strong>rt-thread/README_zh.md at master · RT-Thread/rt-thread</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>外设 · 驱动 · 图形 <em>4</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://github.com/Donocean/KeyWithStatusMachine/blob/main/key.c" target="_blank" rel="noopener">
+          <div class="res-tile">K</div>
+          <div class="res-meta">
+            <strong>KeyWithStatusMachine/key.c at main · Donocean/KeyWithStatusMachine</strong>
+            <span>github.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://docs.lvgl.io/master/intro/basics.html#going-deeper" target="_blank" rel="noopener">
+          <div class="res-tile">L</div>
+          <div class="res-meta">
+            <strong>LVGL 基础知识 — LVGL 文档</strong>
+            <span>docs.lvgl.io</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://note.youdao.com/ynoteshare/index.html?id=98acfc0ec0654492ba66423719a5426c&type=notebook&_time=1723368811819" target="_blank" rel="noopener">
+          <div class="res-tile">哔</div>
+          <div class="res-meta">
+            <strong>哔哩小破站驱动分享笔记</strong>
+            <span>note.youdao.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://koaikxmcvm.feishu.cn/docx/XgkTdrJDJoPv0sxDW6DcbbH3nxh" target="_blank" rel="noopener">
+          <div class="res-tile">鹏</div>
+          <div class="res-meta">
+            <strong>鹏力教育电机驱动教程之BLDC篇 - 飞书云文档</strong>
+            <span>koaikxmcvm.feishu.cn</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>硬件 · PCB · 开发板 <em>4</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://www.altium.com/viewer/cn/" target="_blank" rel="noopener">
+          <div class="res-tile">在</div>
+          <div class="res-meta">
+            <strong>在线PCB查看器，用于电子设计项目可视化及共享</strong>
+            <span>altium.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://oshwhub.com/" target="_blank" rel="noopener">
+          <div class="res-tile">硬</div>
+          <div class="res-meta">
+            <strong>硬件设计，嘉立创EDA开源硬件平台，硬件工程师的电路家园</strong>
+            <span>oshwhub.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.szlcsc.com/" target="_blank" rel="noopener">
+          <div class="res-tile">立</div>
+          <div class="res-meta">
+            <strong>立创商城_一站式电子元器件采购自营商城_嘉立创电子商城</strong>
+            <span>szlcsc.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://lceda001.feishu.cn/wiki/HnF0wbuMbiAj3Ok32B4cCJGanfd" target="_blank" rel="noopener">
+          <div class="res-tile">第</div>
+          <div class="res-meta">
+            <strong>第03章.【立创·泰山派RK3566】文档手册 - 飞书云文档</strong>
+            <span>lceda001.feishu.cn</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="res-group">
+      <h2>物联网 · 通信协议 <em>3</em></h2>
+      <div class="res-grid">
+        <a class="res-card" href="https://www.emqx.io/docs/zh/v5.6/gateway/coap.html#%E5%88%9B%E5%BB%BA%E8%BF%9E%E6%8E%A5" target="_blank" rel="noopener">
+          <div class="res-tile">C</div>
+          <div class="res-meta">
+            <strong>CoAP 协议网关 | EMQX 5.6 文档</strong>
+            <span>emqx.io</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://www.bilibili.com/video/BV1T7411V7bn/?spm_id_from=333.337.search-card.all.click&vd_source=ebcd13533a2a6a61894475eb3b7ddd84" target="_blank" rel="noopener">
+          <div class="res-tile">【</div>
+          <div class="res-meta">
+            <strong>【7天Java0基础速成安卓开发】Day4 MQTT Jar包的导入和物联网调试_哔哩哔哩_bilibili</strong>
+            <span>bilibili.com</span>
+          </div>
+        </a>
+        <a class="res-card" href="https://open.iot.10086.cn/console/product/own" target="_blank" rel="noopener">
+          <div class="res-tile">产</div>
+          <div class="res-meta">
+            <strong>产品开发 - OneNET物联网平台</strong>
+            <span>open.iot.10086.cn</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    </div>
+    <div class="no-result" id="resEmpty">没有匹配的资源，换个词试试。</div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-links">
+        <a href="index.html#about">关于</a>
+        <a href="index.html#work">作品</a>
+        <a href="blog.html">博客</a>
+        <a href="cyberpunk-panel.html">System Online</a>
+        <a href="https://github.com/SuperPotato01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p>© 2026 土豆 · 本站使用纯 HTML + CSS 构建</p>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

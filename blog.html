@@ -9,6 +9,8 @@
 </head>
 <body>
 
+  <div class="cursor-glow" aria-hidden="true"></div>
+
   <nav class="nav">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">土豆<span>.</span></a>
@@ -16,8 +18,13 @@
         <a href="index.html#about">关于</a>
         <a href="index.html#work">作品</a>
         <a href="blog.html" class="active">博客</a>
+        <a href="resources.html">资源库</a>
         <a href="index.html#contact">联系</a>
       </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
     </div>
   </nav>
 
@@ -29,10 +36,25 @@
     </div>
   </header>
 
-  <main class="container" style="padding-bottom: 72px;">
-    <ul class="post-list" style="margin-top: 8px;">
+  <main class="container" style="padding-bottom: 76px;">
+    <div class="blog-tools">
+      <div class="search-box">
+        <input type="search" id="postSearch" placeholder="搜索文章标题或摘要…" aria-label="搜索文章">
+      </div>
+    </div>
 
-      <li class="post-item">
+    <div class="blog-tools" style="margin-top: 0;">
+      <button class="tag-chip active" data-cat="*">全部</button>
+      <button class="tag-chip" data-cat="教程">教程</button>
+      <button class="tag-chip" data-cat="部署">部署</button>
+      <button class="tag-chip" data-cat="FreeRTOS">FreeRTOS</button>
+      <button class="tag-chip" data-cat="调试">调试</button>
+      <button class="tag-chip" data-cat="串口">串口</button>
+      <button class="tag-chip" data-cat="日志">日志</button>
+    </div>
+
+    <ul class="post-list" style="margin-top: 8px;">
+      <li class="post-item" data-tags="教程,部署">
         <div class="p-date">2026-10-25</div>
         <h3><a href="posts/hello-world.html">如何从零搭一个个人网站</a></h3>
         <p>
@@ -42,7 +64,7 @@
         <div class="post-tags"><span>教程</span><span>部署</span></div>
       </li>
 
-      <li class="post-item">
+      <li class="post-item" data-tags="FreeRTOS,调试">
         <div class="p-date">2026-08-14</div>
         <h3><a href="posts/freertos-tasks.html">FreeRTOS 任务优先级里那些我踩过的坑</a></h3>
         <p>
@@ -52,7 +74,7 @@
         <div class="post-tags"><span>FreeRTOS</span><span>调试</span></div>
       </li>
 
-      <li class="post-item">
+      <li class="post-item" data-tags="串口,日志">
         <div class="p-date">2026-05-30</div>
         <h3><a href="posts/serial-debug.html">串口调试：printf 背后到底发生了什么</a></h3>
         <p>
@@ -61,15 +83,25 @@
         </p>
         <div class="post-tags"><span>串口</span><span>日志</span></div>
       </li>
-
     </ul>
+
+    <div class="no-result" id="resEmpty">没有匹配的文章，换个词试试。</div>
   </main>
 
   <footer class="footer">
     <div class="container">
-      <p>© 2026 土豆 · 本站使用纯 HTML + CSS 构建</p>
+      <div class="footer-links">
+        <a href="index.html#about">关于</a>
+        <a href="index.html#work">作品</a>
+        <a href="blog.html">博客</a>
+        <a href="resources.html">资源库</a>
+        <a href="cyberpunk-panel.html">System Online</a>
+        <a href="https://github.com/SuperPotato01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <p>© 2026 土豆 · 本站使用纯 HTML + CSS 构建<span class="footer-clock" id="clock"></span></p>
     </div>
   </footer>
 
+  <script src="assets/app.js"></script>
 </body>
 </html>
