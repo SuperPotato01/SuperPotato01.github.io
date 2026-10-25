@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>你的名字 · 个人主页</title>
   <meta name="description" content="这里是你的个人介绍，一句话说清你是谁、在做什么。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233b6fd4'/%3E%3Cstop offset='1' stop-color='%237b5ce6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext x='32' y='43' font-size='32' font-family='sans-serif' font-weight='700' fill='white' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -25,8 +26,8 @@
   <!-- ===== 首屏 ===== -->
   <header class="hero">
     <div class="container">
-      <div class="hero-eyebrow">你好，我是</div>
-      <h1>你的名字<br>做产品设计与前端开发</h1>
+      <div class="hero-eyebrow">欢迎来到我的个人站</div>
+      <h1>你好，我是你的名字<br>做<em>产品设计与前端开发</em></h1>
       <p>
         一句话介绍你自己。比如：我关注把复杂的东西做简单，
         目前在一家互联网公司负责产品与前端，业余喜欢写点技术笔记。
@@ -43,14 +44,14 @@
     <!-- ===== 关于我 ===== -->
     <section class="section" id="about">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <div class="section-label">About</div>
           <h2>关于我</h2>
           <p>简单聊聊我在做什么、关心什么。</p>
         </div>
 
         <div class="about-grid">
-          <div class="about-text">
+          <div class="about-text reveal">
             <p>
               我是一名<strong>前端开发 / 产品设计师</strong>（改成你的真实身份），
               有 X 年从事相关工作的经验。擅长把模糊的需求拆成清晰的界面，
@@ -65,7 +66,7 @@
             </p>
           </div>
 
-          <div>
+          <div class="reveal">
             <div class="skills-title">技术栈</div>
             <div class="skill-tags">
               <span class="tag">TypeScript</span>
@@ -103,7 +104,7 @@
     <!-- ===== 作品集 ===== -->
     <section class="section" id="work">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <div class="section-label">Work</div>
           <h2>作品集</h2>
           <p>几个我参与或独立完成的项目。</p>
@@ -111,7 +112,7 @@
 
         <div class="work-grid">
 
-          <article class="work-card">
+          <article class="work-card reveal">
             <div class="work-thumb">project-screenshot</div>
             <h3>数据看板 Dashboard</h3>
             <p>面向运营团队的可视化看板，支持多维度筛选与实时刷新，加载性能提升约 40%。</p>
@@ -122,7 +123,7 @@
             <a href="#" class="work-link">查看详情 →</a>
           </article>
 
-          <article class="work-card">
+          <article class="work-card reveal">
             <div class="work-thumb">project-screenshot</div>
             <h3>组件库 Design System</h3>
             <p>从零搭建的组件库，覆盖 30+ 基础组件，已在三个业务线落地使用。</p>
@@ -133,7 +134,7 @@
             <a href="#" class="work-link">查看详情 →</a>
           </article>
 
-          <article class="work-card">
+          <article class="work-card reveal">
             <div class="work-thumb">project-screenshot</div>
             <h3>个人博客系统</h3>
             <p>支持 Markdown 写作与代码高亮的轻量博客，静态生成，访问速度快。</p>
@@ -144,7 +145,7 @@
             <a href="#" class="work-link">查看详情 →</a>
           </article>
 
-          <article class="work-card">
+          <article class="work-card reveal">
             <div class="work-thumb">project-screenshot</div>
             <h3>小程序工具站</h3>
             <p>一个面向学生的效率工具小程序，累计用户约 2 万，日活稳定。</p>
@@ -162,13 +163,13 @@
     <!-- ===== 博客入口 ===== -->
     <section class="section" id="blog-teaser">
       <div class="container">
-        <div class="section-head">
+        <div class="section-head reveal">
           <div class="section-label">Writing</div>
           <h2>最近写的文章</h2>
           <p>技术笔记与一些不成熟的想法。</p>
         </div>
 
-        <ul class="post-list">
+        <ul class="post-list reveal">
           <li class="post-item">
             <div class="p-date">2024-11-02</div>
             <h3><a href="posts/hello-world.html">如何从零搭一个个人网站</a></h3>
@@ -189,7 +190,7 @@
           </li>
         </ul>
 
-        <div class="btn-row" style="margin-top: 28px;">
+        <div class="btn-row reveal" style="margin-top: 30px;">
           <a href="blog.html" class="btn btn-ghost">查看全部文章</a>
         </div>
       </div>
@@ -198,12 +199,12 @@
     <!-- ===== 联系 ===== -->
     <section class="section" id="contact">
       <div class="container">
-        <div class="contact-box">
+        <div class="contact-box reveal">
           <h2>聊聊？</h2>
           <p>有想做的项目、想讨论的问题，或者只是想打个招呼。</p>
           <div class="contact-links">
             <a href="mailto:you@example.com" class="btn btn-primary">发邮件给我</a>
-            <a href="https://github.com/" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://github.com/SuperPotato01" class="btn btn-ghost" target="_blank" rel="noopener">GitHub</a>
             <a href="#" class="btn btn-ghost">微信 / 其他</a>
           </div>
         </div>
@@ -217,6 +218,26 @@
       <p>© 2026 你的名字 · 本站使用纯 HTML + CSS 构建</p>
     </div>
   </footer>
+
+  <script>
+    // 滚动入场动画：给 .reveal 元素进入视口时加 .visible
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
 
 </body>
 </html>
