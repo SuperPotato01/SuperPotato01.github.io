@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>串口调试：printf 背后到底发生了什么 · 土豆</title>
+  <meta name="description" content="从重定向 fputc 到 DMA 环形缓冲，聊聊嵌入式日志系统怎么做才不拖慢实时任务。">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">土豆<span>.</span></a>
+      <div class="nav-links">
+        <a href="../index.html#about">关于</a>
+        <a href="../index.html#work">作品</a>
+        <a href="../blog.html" class="active">博客</a>
+        <a href="../index.html#contact">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="post-header">
+    <div class="container">
+      <a href="../blog.html" class="back-link">← 返回文章列表</a>
+      <h1>串口调试：printf 背后到底发生了什么</h1>
+      <div class="p-meta">2026-05-30 · 阅读约 5 分钟</div>
+    </div>
+  </header>
+
+  <article class="post-body">
+    <div class="container">
+
+      <p>
+        每个嵌入式工程师的第一课都是「点亮 LED」，第二课就是 <code>printf("Hello")</code>。
+        但很多人用了几年 printf，都没意识到它可能是拖垮实时性元凶。
+      </p>
+
+      <h2>printf 的隐性成本</h2>
+      <p>
+        在 STM32 上最常见的做法是重定向 <code>fputc</code> 到 UART：
+      </p>
+      <pre><code>int fputc(int ch, FILE *f) {
+  while (!(USART1->SR &amp; USART_SR_TXE));  // 死等发送寄存器空
+  USART1->DR = (uint8_t)ch;
+  return ch;
+}</code></pre>
+      <p>
+        问题就在那个 <code>while</code> 死等：115200 波特率下，
+        发一个字节约 87μs，打印一行 50 字符的日志就是 <strong>4.3ms</strong>。
+        如果这行日志写在 1ms 控制环里，你的 PID 周期当场翻车。
+      </p>
+
+      <h2>方案一：DMA + 环形缓冲（推荐）</h2>
+      <p>
+        思路很简单：<strong>printf 只负责往缓冲区里拷数据，发送交给 DMA</strong>。
+      </p>
+      <ul>
+        <li>日志写入环形缓冲区，临界区保护几微秒，不阻塞任务</li>
+        <li>DMA 搬运完成后中断里启动下一段传输</li>
+        <li>缓冲区满时丢弃最旧的日志（宁可丢日志，不能堵任务）</li>
+      </ul>
+      <pre><code>void log_write(const char *s) {
+  while (*s) {
+    ring_buf[head] = *s++;
+    head = (head + 1) % RING_SIZE;
+  }
+  if (!dma_busy) start_next_dma_chunk();
+}</code></pre>
+
+      <h2>方案二：分致日志分级</h2>
+      <p>
+        不是所有日志都值得打印。用宏控制编译期裁剪：
+      </p>
+      <pre><code>#define LOG_DEBUG(...)  do { if (g_log_level &gt;= 3) log_write(__VA_ARGS__); } while (0)</code></pre>
+      <p>
+        量产固件把级别设到 WARN，DEBUG 日志在预处理阶段就被删掉，
+        零运行时开销。保留现场日志的能力，是量产产品自救的最后手段。
+      </p>
+
+      <blockquote>
+        一次产品事故后我们复盘：如果固件里多留一条「重启原因」的日志，
+        排查时间能从两天缩短到两小时。从那以后每个项目出厂前
+        都强制检查日志系统。
+      </blockquote>
+
+      <h2>一个容易忽略的坑</h2>
+      <p>
+        中断里调 printf 是高风险动作——除了阻塞问题，
+        <code>printf</code> 不是线程安全的，ISR 和任务同时打印可能输出交错乱码。
+        中断里只做一件事：<strong>把消息塞进队列，让低优先级任务去打印</strong>。
+      </p>
+
+      <hr>
+
+      <p>
+        日志系统是嵌入式工程里典型的「平时没人看，出事救你命」的基建，
+        值得在每个项目开工第一天就搭好。
+      </p>
+
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 土豆 · 本站使用纯 HTML + CSS 构建</p>
+    </div>
+  </footer>
+
+</body>
+</html>

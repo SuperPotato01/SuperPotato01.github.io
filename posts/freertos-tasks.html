@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeRTOS 任务优先级里那些我踩过的坑 · 土豆</title>
+  <meta name="description" content="优先级翻转、栈溢出、任务饿死——三个真实事故的排查过程与修复方案。">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">土豆<span>.</span></a>
+      <div class="nav-links">
+        <a href="../index.html#about">关于</a>
+        <a href="../index.html#work">作品</a>
+        <a href="../blog.html" class="active">博客</a>
+        <a href="../index.html#contact">联系</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="post-header">
+    <div class="container">
+      <a href="../blog.html" class="back-link">← 返回文章列表</a>
+      <h1>FreeRTOS 任务优先级里那些我踩过的坑</h1>
+      <div class="p-meta">2026-08-14 · 阅读约 6 分钟</div>
+    </div>
+  </header>
+
+  <article class="post-body">
+    <div class="container">
+
+      <p>
+        用了三年 RTOS，事故清单里出现频率最高的就是任务优先级相关的问题。
+        写三个我印象最深的，排查过程比结论更有价值。
+      </p>
+
+      <h2>事故一：优先级翻转导致电机失控</h2>
+      <p>
+        现象很诡异：高优先级的电机控制任务偶尔会卡 200ms，示波器上PWM输出抖动。
+        单看代码完全看不出问题——控制任务没调用任何阻塞 API。
+      </p>
+      <p>
+        最后用 trace 工具回放任务调度才发现：
+        控制任务要拿一把互斥锁，而持有锁的日志任务（低优先级）
+        被一堆中等优先级的通信任务抢占了 CPU。
+        <strong>经典的优先级翻转</strong>。
+      </p>
+      <p>
+        修复：把 <code>xSemaphoreCreateMutex()</code> 换成支持优先级继承的互斥量
+        （之前用的是二值信号量），并且把日志写入挪到独立队列，由专门的低优先级任务消费。
+        从那以后，我的代码里二值信号量基本只用于 ISR 同步。
+      </p>
+
+      <h2>事故二：栈溢出，故障出现在不相干的地方</h2>
+      <p>
+        某个任务加了新的解析逻辑后，系统开始随机重启，
+        HardFault 的位置每次都不一样，毫无规律。
+      </p>
+      <p>
+        这种「薛定谔式崩溃」十有八九是栈溢出踩了别的内存。
+        开启 <code>configCHECK_FOR_STACK_OVERFLOW = 2</code> 加栈溢出钩子函数，
+        半小时就抓到了元凶：一个函数里定义了 512 字节的局部数组，
+        而那个任务的栈只给了 256 字。
+      </p>
+      <blockquote>
+        经验：任务栈大小不要拍脑袋定，先用 <code>uxTaskGetStackHighWaterMark()</code>
+        跑一段时间，按实际用量的 1.5~2 倍给。
+      </blockquote>
+
+      <h2>事故三：vTaskDelay 里藏着的饿死</h2>
+      <p>
+        低优先级的「数据上报」任务理论上每 10 秒跑一次，实际半天不跑一次。
+        逻辑审查没毛病，任务也没死锁。
+      </p>
+      <p>
+        真相是：三个高优先级任务都以「事件驱动 + 短睡眠」的方式运行，
+        CPU 利用率长期在 95% 以上，低优先级任务每次分到的时间片都杯水车薪。
+      </p>
+      <p>
+        修复方案是给上报任务用一个「软实时」策略：
+        攒够一批数据后用 <code>vTaskPrioritySet()</code> 临时抬升自己的优先级，
+        发完立刻降回去。不优雅，但在资源紧张的 MCU 上很有效。
+      </p>
+
+      <h2>总结成三条军规</h2>
+      <ul>
+        <li>共享资源一律互斥量（带优先级继承），二值信号量留给中断同步。</li>
+        <li>栈大小用数据说话，HighWaterMark 定期上报到日志。</li>
+        <li>任何"偶尔卡顿/随机重启"的问题，先用 trace 工具看调度，别盯代码猜。</li>
+      </ul>
+
+      <hr>
+
+      <p>RTOS 的坑大多不写在手册里，写在事故报告里。</p>
+
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 土豆 · 本站使用纯 HTML + CSS 构建</p>
+    </div>
+  </footer>
+
+</body>
+</html>
