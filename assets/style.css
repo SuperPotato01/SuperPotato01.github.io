@@ -1834,6 +1834,171 @@ body.loaded {
   filter: contrast(1.12) brightness(0.7) saturate(1.1);
 }
 
+/* ============================================================
+   v7 质感层
+   ============================================================ */
+
+/* ---------- 区块标题渐变下划线 ---------- */
+.section-head h2::after {
+  content: "";
+  display: block;
+  width: 46px;
+  height: 3px;
+  margin-top: 12px;
+  border-radius: 2px;
+  background: var(--grad);
+  opacity: 0.85;
+}
+
+/* ---------- 作品缩略图做成迷你设备窗口 ---------- */
+.work-thumb {
+  position: relative;
+  padding-top: 14px;
+  letter-spacing: 0.04em;
+}
+
+.work-thumb::before {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: 14px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #c3d2e8;
+  box-shadow: 11px 0 0 #c3d2e8, 22px 0 0 #c3d2e8;
+}
+
+[data-theme="dark"] .work-thumb::before {
+  background: #3a4d70;
+  box-shadow: 11px 0 0 #3a4d70, 22px 0 0 #3a4d70;
+}
+
+/* ---------- 技能条流光 ---------- */
+.sb-fill {
+  position: relative;
+  overflow: hidden;
+}
+
+.sb-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.45) 50%, transparent 80%);
+  transform: translateX(-100%);
+  animation: shimmer 3.2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-fill::after { animation: none; }
+}
+
+/* ---------- 首屏数据条分隔线 ---------- */
+.hero-stats > div + div {
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  padding-left: clamp(18px, 3vw, 34px);
+}
+
+@media (max-width: 560px) {
+  .hero-stats > div + div {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+/* ---------- 导航链接悬浮胶囊 ---------- */
+.nav-links a {
+  padding: 5px 11px;
+  margin: 0 -11px;
+  border-radius: 9px;
+  transition: color 0.18s, background 0.18s;
+}
+
+.nav-links a:hover {
+  background: var(--accent-soft);
+}
+
+.nav-links a.active::after {
+  bottom: -2px;
+}
+
+/* ---------- 作品区细点阵底纹 ---------- */
+#work {
+  background-image: radial-gradient(rgba(59, 111, 212, 0.08) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+[data-theme="dark"] #work {
+  background-image: radial-gradient(rgba(125, 178, 255, 0.07) 1px, transparent 1px);
+}
+
+/* ---------- 暗色卡片顶部内发光 ---------- */
+[data-theme="dark"] .work-card,
+[data-theme="dark"] .res-card {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), var(--shadow-sm);
+}
+
+/* ---------- 标签悬停填充渐变 ---------- */
+.tag:hover {
+  background: var(--grad);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* ---------- 走马灯分隔符 ---------- */
+.marquee-track span::after {
+  content: "·";
+  margin-left: 22px;
+  color: rgba(139, 153, 176, 0.6);
+}
+
+/* ---------- 文章标题渐变细线 ---------- */
+.post-header h1::after {
+  content: "";
+  display: block;
+  width: 54px;
+  height: 3px;
+  margin-top: 16px;
+  border-radius: 2px;
+  background: var(--grad);
+}
+
+/* ---------- 引用块引号装饰 ---------- */
+.post-body blockquote {
+  position: relative;
+}
+
+.post-body blockquote::before {
+  content: "\201C";
+  position: absolute;
+  left: 6px;
+  top: -4px;
+  font-size: 30px;
+  line-height: 1;
+  color: rgba(59, 111, 212, 0.28);
+  font-family: Georgia, serif;
+}
+
+/* ---------- 联系区背景缓慢流动 ---------- */
+.contact-box {
+  animation: veil-drift 16s ease-in-out infinite alternate;
+}
+
+@keyframes veil-drift {
+  from { background-position: 0% 0%, 100% 100%, 0 0; }
+  to   { background-position: 12% 10%, 88% 90%, 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-box { animation: none; }
+}
+
 /* ---------- 打印样式（导出 PDF / 简历） ---------- */
 @media print {
   .nav, .to-top, .cursor-glow, .scroll-hint, .tech-marquee,
