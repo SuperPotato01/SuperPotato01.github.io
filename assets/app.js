@@ -503,4 +503,277 @@
     tick();
     setInterval(tick, 1000);
   })();
+
+  /* ============================================================
+     v8 新增层：命令面板 / 代码高亮 / 滚动增强 / PWA
+     ============================================================ */
+
+  /* 通用 Toast —— 函数声明提升，供以下模块共用 */
+  var toastTimer = null;
+  function toast(msg) {
+    var el = $("#siteToast");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "siteToast";
+      el.className = "site-toast";
+      el.setAttribute("role", "status");
+      el.setAttribute("aria-live", "polite");
+      document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove("show"); }, 2200);
+  }
+  window.__siteToast = toast; // 供外部内联调用
+
+  /* ---------- 26. Ctrl/⌘ + K 命令面板 ---------- */
+  (function commandPalette() {
+    var BASE = location.pathname.indexOf("/posts/") >= 0 ? "../" : "";
+    function copyText(t) {
+      if (navigator.clipboard) return navigator.clipboard.writeText(t);
+      return Promise.resolve();
+    }
+    var CMDS = [
+      { t: "首页", d: "回到主页", ic: "⌂", run: function () { location.href = BASE + "index.html"; } },
+      { t: "关于我", d: "技能栈与经历", ic: "◑", run: function () { location.href = BASE + "index.html#about"; } },
+      { t: "作品与项目", d: "4 个嵌入式项目", ic: "▦", run: function () { location.href = BASE + "index.html#work"; } },
+      { t: "博客", d: "文章列表 · 可搜索", ic: "✎", run: function () { location.href = BASE + "blog.html"; } },
+      { t: "资源库", d: "收藏的技术站点", ic: "❖", run: function () { location.href = BASE + "resources.html"; } },
+      { t: "联系我", d: "邮箱 / GitHub", ic: "✉", run: function () { location.href = BASE + "index.html#contact"; } },
+      { t: "赛博朋克 Demo", d: "SYSTEM ONLINE", ic: "◈", run: function () { location.href = BASE + "cyberpunk-panel.html"; } },
+      { t: "文章 · 从零搭一个个人网站", d: "2026-10-25", ic: "›", run: function () { location.href = BASE + "posts/hello-world.html"; } },
+      { t: "文章 · FreeRTOS 任务优先级踩坑", d: "2026-08-14", ic: "›", run: function () { location.href = BASE + "posts/freertos-tasks.html"; } },
+      { t: "文章 · 串口调试 printf 背后", d: "2026-05-30", ic: "›", run: function () { location.href = BASE + "posts/serial-debug.html"; } },
+      { t: "切换深色 / 浅色主题", d: "明暗切换", ic: "◐", run: function () { var b = $("#themeToggle"); if (b) b.click(); } },
+      { t: "复制本页链接", d: location.host || "分享", ic: "⧉", run: function () { copyText(location.href).then(function () { toast("链接已复制 ✓"); }); } },
+      { t: "回到顶部", d: "scroll to top", ic: "↑", run: function () { scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" }); } }
+    ];
+
+    var overlay = document.createElement("div");
+    overlay.className = "cmdk-overlay";
+    overlay.innerHTML =
+      '<div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="命令面板">' +
+        '<div class="cmdk-input-wrap"><span class="cmdk-caret">›</span>' +
+          '<input class="cmdk-input" type="text" placeholder="搜索页面或输入命令…" autocomplete="off" spellcheck="false">' +
+          '<kbd class="cmdk-esc">ESC</kbd></div>' +
+        '<ul class="cmdk-list"></ul>' +
+        '<div class="cmdk-foot">↑ ↓ 选择　↵ 执行　<b>Ctrl / ⌘ + K</b> 打开</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    var input = overlay.querySelector(".cmdk-input");
+    var list = overlay.querySelector(".cmdk-list");
+    var active = 0, shown = [];
+
+    function paintActive() {
+      var items = list.querySelectorAll(".cmdk-item");
+      items.forEach(function (el, i) { el.classList.toggle("on", i === active); });
+      if (items[active]) items[active].scrollIntoView({ block: "nearest" });
+    }
+    function render(q) {
+      q = (q || "").trim().toLowerCase();
+      shown = CMDS.filter(function (c) {
+        return !q || (c.t + " " + c.d).toLowerCase().indexOf(q) >= 0;
+      });
+      list.innerHTML = "";
+      if (!shown.length) {
+        var em = document.createElement("li");
+        em.className = "cmdk-empty";
+        em.textContent = "没有匹配的命令";
+        list.appendChild(em);
+        return;
+      }
+      shown.forEach(function (c, i) {
+        var li = document.createElement("li");
+        li.className = "cmdk-item" + (i === active ? " on" : "");
+        li.innerHTML = '<span class="ci-ic"></span><span class="ci-main"><b></b><small></small></span><span class="ci-enter">↵</span>';
+        li.querySelector(".ci-ic").textContent = c.ic;
+        li.querySelector("b").textContent = c.t;
+        li.querySelector("small").textContent = c.d;
+        li.addEventListener("mouseenter", function () { active = i; paintActive(); });
+        li.addEventListener("click", function () { exec(i); });
+        list.appendChild(li);
+      });
+      active = Math.min(active, shown.length - 1);
+      paintActive();
+    }
+    function exec(i) {
+      var c = shown[i];
+      if (!c) return;
+      close();
+      setTimeout(c.run, 80); // 让关闭动画先走，动作类命令体验更顺
+    }
+    function open() { overlay.classList.add("open"); input.value = ""; active = 0; render(""); setTimeout(function () { input.focus(); }, 30); }
+    function close() { overlay.classList.remove("open"); input.blur(); }
+    function toggle() { overlay.classList.contains("open") ? close() : open(); }
+
+    input.addEventListener("input", function () { active = 0; render(input.value); });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowDown") { e.preventDefault(); active = Math.min(active + 1, shown.length - 1); paintActive(); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); active = Math.max(active - 1, 0); paintActive(); }
+      else if (e.key === "Enter") { e.preventDefault(); exec(active); }
+      else if (e.key === "Escape") { close(); }
+    });
+    overlay.addEventListener("click", function (e) { if (e.target === overlay) close(); });
+    document.addEventListener("keydown", function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); toggle(); }
+      else if (e.key === "Escape" && overlay.classList.contains("open")) { close(); }
+    });
+
+    // 导航右侧统一加入口按钮（各页面一致，无需改 HTML）
+    var navInner = $(".nav-inner");
+    if (navInner) {
+      var trig = document.createElement("button");
+      trig.className = "cmdk-trigger";
+      trig.type = "button";
+      trig.setAttribute("aria-label", "打开命令面板 (Ctrl+K)");
+      trig.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>⌘K</span>';
+      trig.addEventListener("click", toggle);
+      navInner.insertBefore(trig, $("#themeToggle"));
+    }
+  })();
+
+  /* ---------- 27. 代码块语法高亮（轻量正则，亮暗自适应） ---------- */
+  (function highlight() {
+    var codes = $$(".post-body pre code");
+    if (!codes.length) return;
+    var KW = "void|int|char|short|long|float|double|unsigned|signed|const|static|volatile|struct|enum|union|typedef|sizeof|return|if|else|for|while|do|switch|case|default|break|continue|goto|extern|register|inline|restrict|_Bool|bool|true|false|NULL|class|public|private|protected|new|delete|this|import|from|def|lambda|pass|with|as|try|except|finally|raise|yield|global|nonlocal|None|True|False|and|or|not|in|is";
+    // 顺序：预处理 > 注释 > 字符串 > 数字 > 关键字 > 全大写宏 > 函数名
+    var RE = new RegExp(
+      "(^[ \\t]*#[a-z]+)" +
+      "|(\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)" +
+      "|(\"(?:\\\\.|[^\"\\\\])*\"|'(?:\\\\.|[^'\\\\])*')" +
+      "|(\\b0x[0-9a-fA-F]+\\b|\\b\\d+(?:\\.\\d+)?\\b)" +
+      "|(\\b(?:" + KW + ")\\b)" +
+      "|(\\b[A-Z][A-Z0-9_]{2,}\\b)" +
+      "|(\\b[A-Za-z_]\\w*(?=\\s*\\())",
+      "gm"
+    );
+    function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+    codes.forEach(function (code) {
+      var src = code.textContent;
+      var out = "", last = 0, m;
+      RE.lastIndex = 0;
+      while ((m = RE.exec(src)) !== null) {
+        out += esc(src.slice(last, m.index));
+        var cls = m[1] ? "meta" : m[2] ? "com" : m[3] ? "str" : m[4] ? "num" : m[5] ? "kw" : m[6] ? "macro" : "fn";
+        out += '<span class="tk-' + cls + '">' + esc(m[0]) + '</span>';
+        last = m.index + m[0].length;
+      }
+      out += esc(src.slice(last));
+      code.innerHTML = out;
+    });
+  })();
+
+  /* ---------- 28. 点击涟漪（按钮 / 标签 / 返回顶部） ---------- */
+  (function ripple() {
+    if (reduceMotion || !document.addEventListener) return;
+    document.addEventListener("click", function (e) {
+      var t = e.target;
+      var el = t && t.closest ? t.closest(".btn, .tag-chip, .to-top, .cmdk-trigger, .copy-link-btn") : null;
+      if (!el) return;
+      var r = document.createElement("span");
+      r.className = "ripple";
+      var rect = el.getBoundingClientRect();
+      var size = Math.max(rect.width, rect.height);
+      r.style.width = r.style.height = size + "px";
+      r.style.left = (e.clientX - rect.left - size / 2) + "px";
+      r.style.top = (e.clientY - rect.top - size / 2) + "px";
+      el.appendChild(r);
+      setTimeout(function () { if (r.parentNode) r.parentNode.removeChild(r); }, 620);
+    });
+  })();
+
+  /* ---------- 29. 全站顶部进度条 + 环形返回顶部 ---------- */
+  (function scrollEnhance() {
+    var hasReadBar = !!$("#readProgress"); // 文章页已有阅读进度条，避免重复
+    var bar = null;
+    if (!hasReadBar) {
+      bar = document.createElement("div");
+      bar.className = "scroll-progress-top";
+      bar.setAttribute("aria-hidden", "true");
+      document.body.appendChild(bar);
+    }
+    var toTop = $("#toTop");
+    var fg = null, C = 0;
+    if (toTop) {
+      toTop.classList.add("ring");
+      toTop.innerHTML = '<svg class="ring-svg" viewBox="0 0 44 44" aria-hidden="true">' +
+        '<circle class="ring-bg" cx="22" cy="22" r="19"></circle>' +
+        '<circle class="ring-fg" cx="22" cy="22" r="19"></circle></svg>' +
+        '<span class="ring-arrow">↑</span>';
+      fg = toTop.querySelector(".ring-fg");
+      C = 2 * Math.PI * 19;
+      fg.style.strokeDasharray = C;
+      fg.style.strokeDashoffset = C;
+    }
+    var ticking = false;
+    function update() {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var p = max > 0 ? Math.min(1, scrollY / max) : 0;
+      if (bar) bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
+      if (fg) fg.style.strokeDashoffset = (C * (1 - p)).toFixed(2);
+      ticking = false;
+    }
+    if (bar || fg) {
+      addEventListener("scroll", function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+    }
+  })();
+
+  /* ---------- 30. 文章字数统计 + 复制本文链接 ---------- */
+  (function postExtras() {
+    var meta = $(".post-header .p-meta");
+    var body = $(".post-body");
+    if (meta && body) {
+      var text = body.textContent || "";
+      var cn = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+      if (meta.textContent.indexOf("字") < 0) {
+        meta.textContent = meta.textContent.replace(/\s*$/, "") + " · 约 " + cn + " 字";
+      }
+    }
+    var nav = $(".post-nav");
+    if (nav && navigator.clipboard) {
+      var btn = document.createElement("button");
+      btn.className = "copy-link-btn";
+      btn.type = "button";
+      btn.textContent = "⧉ 复制本文链接";
+      btn.addEventListener("click", function () {
+        navigator.clipboard.writeText(location.href).then(function () { toast("链接已复制 ✓"); });
+      });
+      if (nav.parentNode) nav.parentNode.insertBefore(btn, nav.nextSibling);
+    }
+  })();
+
+  /* ---------- 31. PWA：注册 Service Worker + 安装入口 ---------- */
+  (function pwa() {
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
+      navigator.serviceWorker.register("/sw.js").catch(function () { /* 静默失败，不影响站点 */ });
+    }
+    var deferred = null, btn = null;
+    addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      deferred = e;
+      if (!btn) {
+        btn = document.createElement("button");
+        btn.className = "pwa-install";
+        btn.type = "button";
+        btn.innerHTML = "⬇ 安装到桌面";
+        btn.addEventListener("click", function () {
+          if (!deferred) return;
+          deferred.prompt();
+          deferred.userChoice.then(function () { deferred = null; btn.classList.remove("show"); });
+        });
+        document.body.appendChild(btn);
+      }
+      btn.classList.add("show");
+    });
+    addEventListener("appinstalled", function () {
+      if (btn) btn.classList.remove("show");
+      toast("安装成功 ✓");
+    });
+  })();
 })();

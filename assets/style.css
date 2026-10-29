@@ -1999,6 +1999,281 @@ body.loaded {
   .contact-box { animation: none; }
 }
 
+/* ============================================================
+   v8 新增层：命令面板 / Toast / 代码高亮 / 环形进度 / 涟漪 / PWA
+   颜色尽量复用 :root 与 [data-theme="dark"] 变量，自动亮暗适配
+   ============================================================ */
+
+/* ---------- 通用 Toast 轻提示 ---------- */
+.site-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  transform: translate(-50%, 20px);
+  z-index: 130;
+  background: var(--dark, #12203a);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 11px 22px;
+  border-radius: 12px;
+  font-size: 14px;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.site-toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---------- Ctrl/⌘ + K 命令面板 ---------- */
+.cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  background: rgba(6, 10, 20, 0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.cmdk-overlay.open { opacity: 1; pointer-events: auto; }
+
+.cmdk-panel {
+  width: min(560px, 92vw);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transform: translateY(-12px);
+  transition: transform 0.18s ease;
+}
+.cmdk-overlay.open .cmdk-panel { transform: none; }
+
+.cmdk-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+.cmdk-caret {
+  color: var(--accent);
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 700;
+}
+.cmdk-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 15.5px;
+  font-family: var(--font);
+}
+.cmdk-input::placeholder { color: var(--text-dim); }
+.cmdk-esc {
+  font: 11px var(--mono);
+  color: var(--text-dim);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 3px 7px;
+}
+
+.cmdk-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 52vh;
+  overflow-y: auto;
+}
+.cmdk-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.cmdk-item.on { background: var(--accent-soft); }
+.ci-ic {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 16px;
+}
+.ci-main { flex: 1; min-width: 0; }
+.ci-main b { display: block; font-size: 14.5px; font-weight: 600; color: var(--text); }
+.ci-main small { display: block; font-size: 12px; color: var(--text-muted); }
+.ci-enter { color: var(--accent); opacity: 0; font-size: 15px; }
+.cmdk-item.on .ci-enter { opacity: 1; }
+.cmdk-empty { padding: 26px; text-align: center; color: var(--text-dim); font-size: 14px; }
+.cmdk-foot {
+  display: flex;
+  gap: 16px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  color: var(--text-dim);
+  font-size: 12px;
+}
+.cmdk-foot b { color: var(--accent); font-weight: 600; }
+
+/* 导航栏内的命令面板入口 */
+.cmdk-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 9px;
+  padding: 6px 9px;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-family: var(--font);
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+.cmdk-trigger svg { width: 15px; height: 15px; }
+.cmdk-trigger:hover { color: var(--accent); border-color: rgba(59, 111, 212, 0.5); }
+
+/* ---------- 代码语法高亮（亮色） ---------- */
+.tk-kw    { color: #7b3fe4; font-weight: 600; }
+.tk-str   { color: #0a8f5b; }
+.tk-com   { color: #8a94a6; font-style: italic; }
+.tk-num   { color: #b3591f; }
+.tk-meta  { color: #c2185b; }
+.tk-macro { color: #0f7a8a; }
+.tk-fn    { color: #2c559f; }
+/* 代码高亮（暗色） */
+[data-theme="dark"] .tk-kw    { color: #c9a7ff; }
+[data-theme="dark"] .tk-str   { color: #7fd6a2; }
+[data-theme="dark"] .tk-com   { color: #7183a0; }
+[data-theme="dark"] .tk-num   { color: #ffb27a; }
+[data-theme="dark"] .tk-meta  { color: #ff8ab8; }
+[data-theme="dark"] .tk-macro { color: #6fd6e6; }
+[data-theme="dark"] .tk-fn    { color: #8fb4ff; }
+
+/* ---------- 点击涟漪 ---------- */
+.btn, .tag-chip, .to-top, .cmdk-trigger, .copy-link-btn { position: relative; }
+.btn, .tag-chip, .to-top, .cmdk-trigger, .copy-link-btn { overflow: hidden; }
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  pointer-events: none;
+  animation: ripple-out 0.6s ease-out forwards;
+}
+@keyframes ripple-out { to { transform: scale(2.4); opacity: 0; } }
+/* 浅色按钮上的涟漪改深一点，保证可见 */
+.btn-ghost .ripple, .tag-chip .ripple, .copy-link-btn .ripple { background: rgba(59, 111, 212, 0.28); }
+
+/* ---------- 全站顶部进度条 ---------- */
+.scroll-progress-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 88;
+  background: var(--grad);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  will-change: transform;
+}
+
+/* ---------- 环形返回顶部 ---------- */
+.to-top.ring {
+  background: transparent;
+  color: var(--accent);
+  box-shadow: none;
+  border-radius: 50%;
+}
+.to-top.ring:hover { background: transparent; box-shadow: none; }
+.ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-bg { fill: none; stroke: rgba(120, 130, 170, 0.25); stroke-width: 3; }
+.ring-fg {
+  fill: none;
+  stroke: var(--accent-2);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s linear;
+}
+.ring-arrow { position: relative; font-size: 19px; font-weight: 700; line-height: 1; }
+[data-theme="dark"] .ring-bg { stroke: rgba(160, 180, 220, 0.22); }
+[data-theme="dark"] .ring-fg { stroke: #8fb4ff; }
+
+/* ---------- 文章复制本文链接 ---------- */
+.copy-link-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 22px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13.5px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.copy-link-btn:hover { color: var(--accent); border-color: rgba(59, 111, 212, 0.5); }
+
+/* ---------- PWA 安装按钮 ---------- */
+.pwa-install {
+  position: fixed;
+  right: 22px;
+  bottom: 84px;
+  z-index: 72;
+  border: none;
+  background: var(--grad);
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  font-family: var(--font);
+  cursor: pointer;
+  box-shadow: 0 12px 30px -10px rgba(90, 90, 220, 0.7);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.pwa-install.show { opacity: 1; pointer-events: auto; transform: none; }
+
+/* v8 组件在打印时隐藏 */
+@media print {
+  .site-toast, .cmdk-overlay, .cmdk-trigger, .scroll-progress-top,
+  .to-top, .pwa-install, .copy-link-btn, .ripple { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmdk-panel, .cmdk-overlay, .site-toast, .pwa-install, .to-top { transition: none; }
+  .ripple { animation: none; }
+}
+
 /* ---------- 打印样式（导出 PDF / 简历） ---------- */
 @media print {
   .nav, .to-top, .cursor-glow, .scroll-hint, .tech-marquee,
